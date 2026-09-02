@@ -1,30 +1,178 @@
-.page-header { background: linear-gradient(135deg, #00482b, #007b3e); color: #fff; padding: 4rem 0; text-align: center; }
-.page-header h1 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin-bottom: 0.5rem; }
-.page-header p { font-size: 1.1rem; opacity: 0.9; }
-.report-section { padding: 4rem 0; }
-.report-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
-.report-form-card { background: #fff; border: 1px solid #d8d8d8; border-radius: 12px; padding: 2rem; }
-.form-notice { font-size: 0.9rem; color: #4d4d4d; margin-bottom: 0.5rem; }
-.form-notice.warning { color: #f7931e; font-weight: 500; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.form-group { margin-bottom: 1.5rem; }
-.form-group label { display: block; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.9rem; color: #0c0f16; margin-bottom: 0.5rem; }
-.form-group input, .form-group select { width: 100%; padding: 0.75rem 1rem; border: 1px solid #d8d8d8; border-radius: 8px; font-size: 0.9rem; color: #0c0f16; transition: border-color 0.3s; }
-.form-group input:focus, .form-group select:focus { outline: none; border-color: #007b3e; }
-.form-actions { display: flex; gap: 1rem; margin-top: 1rem; }
-.form-actions button { padding: 0.85rem 2rem; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s; }
-.btn-preview { background: #fff; border: 1px solid #d8d8d8; color: #4d4d4d; }
-.btn-preview:hover { border-color: #007b3e; color: #007b3e; }
-.btn-generate { background: #007b3e; border: none; color: #fff; }
-.btn-generate:hover { background: #00482b; }
-.reports-history { background: #fff; border: 1px solid #d8d8d8; border-radius: 12px; padding: 1.5rem; }
-.reports-history h3 { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: #00482b; margin-bottom: 1.25rem; }
-.history-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border: 1px solid #d8d8d8; border-radius: 8px; margin-bottom: 0.75rem; transition: all 0.3s; }
-.history-item:hover { border-color: #007b3e; }
-.report-icon { font-size: 1.5rem; }
-.report-info { flex: 1; }
-.report-name { display: block; font-weight: 600; font-size: 0.9rem; color: #0c0f16; }
-.report-meta { font-size: 0.8rem; color: #a6a6a6; }
-.btn-download { background: #edf2c2; border: none; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 1.1rem; cursor: pointer; }
-.btn-download:hover { background: #007b3e; color: #fff; }
-@media (max-width: 768px) { .report-grid, .form-row { grid-template-columns: 1fr; } }
+.hero-banner {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(121,192,0,0.85) 0%, rgba(0,123,62,0.85) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 4rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-content h1 {
+  font-family: var(--font-title);
+  font-size: 56px;
+  color: white;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.hero-content p {
+  font-size: 17px;
+  color: white;
+  margin-top: 1rem;
+}
+
+.report-intro {
+  background: var(--bg-white);
+  padding: 2rem 4rem;
+}
+
+.report-intro-container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.report-intro p {
+  font-size: 24px;
+  color: var(--green-medium);
+}
+
+.report-intro .warning {
+  font-size: 14px;
+  text-transform: uppercase;
+  margin-top: 0.5rem;
+}
+
+.report-section {
+  padding: 2rem 4rem 4rem;
+}
+
+.report-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.report-form-area {
+  background: var(--bg-dark);
+  padding: 3rem;
+  border-radius: 8px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--green-medium);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #666;
+  background: transparent;
+  color: white;
+  font-family: var(--font-body);
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--green-medium);
+}
+
+.btn-generate {
+  background: var(--green-medium);
+  color: white;
+  padding: 10px 30px;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.3s;
+}
+
+.btn-generate:hover {
+  background: var(--green-dark);
+}
+
+.report-preview {
+  padding: 2rem 0;
+}
+
+.report-preview h3 {
+  font-family: var(--font-title);
+  font-size: 24px;
+  color: var(--green-medium);
+  margin-bottom: 2rem;
+}
+
+.preview-placeholder {
+  background: var(--bg-light);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3rem;
+  min-height: 200px;
+  margin-bottom: 2rem;
+}
+
+.preview-doc {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.doc-icon {
+  width: 50px;
+  height: 50px;
+  background: var(--green-medium);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: white;
+}
+
+.preview-doc span {
+  font-size: 16px;
+  color: var(--text-dark);
+}
+
+.report-preview h4 {
+  font-family: var(--font-title);
+  font-size: 20px;
+  color: var(--green-dark);
+}

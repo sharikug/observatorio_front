@@ -1,38 +1,21 @@
-<section class="page-header">
-  <div class="container-custom"><h1>Investigación en Cifras</h1><p>Datos y métricas de la actividad investigativa</p></div>
-</section>
-<section class="metrics-section">
-  <div class="container-custom">
-    <div class="metrics-grid">
-      <div class="metric-card" *ngFor="let metric of metrics">
-        <div class="metric-value">{{ metric.value }}</div>
-        <div class="metric-label">{{ metric.label }}</div>
-        <div class="metric-trend">{{ metric.trend }} vs año anterior</div>
-      </div>
-    </div>
+<section class="hero-banner">
+  <img src="assets/images/hero-investigacion.svg" alt="Hero" class="hero-bg-image">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1><i class="fas fa-chart-bar"></i> Investigacion en Cifras</h1>
+    <p>Conoce los datos de las investigaciones de la Universidad de Cundinamarca</p>
   </div>
 </section>
-<section class="faculties-section">
-  <div class="container-custom">
-    <h2 class="section-title">Producción por Facultad</h2>
-    <div class="faculties-list">
-      <div class="faculty-item" *ngFor="let faculty of faculties">
-        <div class="faculty-info"><span class="faculty-name">{{ faculty.name }}</span><span class="faculty-count">{{ faculty.projects }} proyectos</span></div>
-        <div class="progress-bar"><div class="progress-fill" [style.width.%]="faculty.percentage"></div></div>
+
+<section class="charts-section">
+  <div class="charts-container">
+    <div class="chart-card" *ngFor="let chart of charts">
+      <div class="chart-header">
+        <i class="fas fa-chart-pie"></i>
+        <span>Datos de investigacion</span>
       </div>
-    </div>
-  </div>
-</section>
-<section class="timeline-section">
-  <div class="container-custom">
-    <h2 class="section-title">Evolución Histórica</h2>
-    <div class="timeline-grid">
-      <div class="timeline-card" *ngFor="let data of yearlyData">
-        <div class="timeline-year">{{ data.year }}</div>
-        <div class="timeline-data">
-          <div class="data-item"><span class="data-value">{{ data.projects }}</span><span class="data-label">Proyectos</span></div>
-          <div class="data-item"><span class="data-value">{{ data.publications }}</span><span class="data-label">Publicaciones</span></div>
-        </div>
+      <div class="chart-body">
+        <img [src]="chart.image" alt="Chart">
       </div>
     </div>
   </div>

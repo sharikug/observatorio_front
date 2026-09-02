@@ -1,36 +1,25 @@
-<section class="page-header">
-  <div class="container-custom">
-    <a routerLink="/impacto" class="back-link">&larr; Volver a Impacto</a>
-    <h1>{{ impactCase?.title }}</h1>
-    <div class="header-meta"><span class="category-badge">{{ impactCase?.category }}</span><span class="location">{{ impactCase?.location }}</span></div>
-  </div>
-</section>
 <section class="detail-section">
-  <div class="container-custom">
+  <div class="detail-container">
+    <a routerLink="/impacto" class="back-link"><i class="fas fa-arrow-left"></i> Volver</a>
     <div class="detail-grid">
       <div class="detail-main">
-        <div class="detail-card"><h2>Descripción del Proyecto</h2><p>{{ impactCase?.description }}</p><p>Este proyecto ha generado un impacto significativo en la comunidad, contribuyendo al desarrollo sostenible y la innovación tecnológica.</p></div>
-        <div class="detail-card"><h2>Objetivos</h2><ul><li>Desarrollar soluciones innovadoras para problemas locales</li><li>Transferir tecnología a la comunidad</li><li>Generar conocimiento aplicado</li><li>Fortalecer la capacidad investigativa regional</li></ul></div>
-        <div class="detail-card"><h2>Resultados</h2>
-          <div class="results-grid">
-            <div class="result-item"><span class="result-number">150+</span><span class="result-label">Beneficiarios</span></div>
-            <div class="result-item"><span class="result-number">12</span><span class="result-label">Publicaciones</span></div>
-            <div class="result-item"><span class="result-number">3</span><span class="result-label">Patentes</span></div>
-            <div class="result-item"><span class="result-number">5</span><span class="result-label">Alianzas</span></div>
-          </div>
+        <div class="detail-image">
+          <img [src]="impactCase?.image" [alt]="impactCase?.title">
         </div>
+        <h2><i class="fas fa-folder-open"></i> {{ impactCase?.title }}</h2>
+        <p>{{ impactCase?.desc }}</p>
       </div>
       <div class="detail-sidebar">
-        <div class="sidebar-card"><h3>Información General</h3>
-          <div class="info-item"><span class="info-label">Institución</span><span class="info-value">{{ impactCase?.institution }}</span></div>
-          <div class="info-item"><span class="info-label">Ubicación</span><span class="info-value">{{ impactCase?.location }}</span></div>
-          <div class="info-item"><span class="info-label">Período</span><span class="info-value">{{ impactCase?.period }}</span></div>
-          <div class="info-item"><span class="info-label">Estado</span><span class="info-value status-active">Activo</span></div>
-        </div>
-        <div class="sidebar-card"><h3>Investigadores</h3>
+        <div class="info-card">
+          <h3><i class="fas fa-users"></i> Investigadores</h3>
           <div class="researcher" *ngFor="let r of impactCase?.researchers">
-            <div class="researcher-avatar">Inv</div>
-            <div class="researcher-info"><span class="researcher-name">{{ r }}</span><span class="researcher-role">Investigador Principal</span></div>
+            <i class="fas fa-user-circle"></i> <strong>{{ r.name }}</strong> - {{ r.role }}
+          </div>
+          <h3><i class="fas fa-user-friends"></i> Co-investigadores</h3>
+          <h3><i class="fas fa-file-pdf"></i> Documentos</h3>
+          <h3><i class="fas fa-link"></i> Links de interes.</h3>
+          <div *ngFor="let link of impactCase?.links">
+            <a href="https://{{ link }}" target="_blank"><i class="fas fa-external-link-alt"></i> {{ link }}</a>
           </div>
         </div>
       </div>

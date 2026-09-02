@@ -11,8 +11,6 @@ import { RouterLink } from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  credentials = { email: '', password: '', rememberMe: false };
-  showPassword = false;
-  login() { alert('Iniciando sesión...'); }
-  togglePassword() { this.showPassword = !this.showPassword; }
+  credentials = { usuario: '', password: '', rememberMe: false };
+  login() { alert('Iniciando sesion...'); }
 }

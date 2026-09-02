@@ -1,6 +1,11 @@
-<app-navbar></app-navbar>
-<main>
-  <router-outlet></router-outlet>
-</main>
-<app-footer></app-footer>
-<app-chatbot></app-chatbot>
+<div class="app-layout">
+  <app-topbar></app-topbar>
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+    <app-footer></app-footer>
+    <app-chatbot></app-chatbot>
+  </div>
+</div>

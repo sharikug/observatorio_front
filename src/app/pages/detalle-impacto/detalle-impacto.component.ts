@@ -12,9 +12,9 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 export class DetalleImpactoComponent implements OnInit {
   impactCase: any;
   allCases = [
-    { id: 1, title: 'Transferencia tecnológica y desarrollo de soluciones', category: 'Innovación', description: 'Proyectos de alto impacto en diversas áreas del conocimiento.', location: 'Fusagasugá', researchers: ['Mario Pelaez', 'Milton Guanaco'], institution: 'Universidad de Cundinamarca', period: '2023-2024' },
-    { id: 2, title: 'Innovación en energías renovables', category: 'Energía', description: 'Desarrollo de soluciones sostenibles para comunidades.', location: 'Chía', researchers: ['Maria Milena'], institution: 'Universidad de Cundinamarca', period: '2022-2024' },
-    { id: 3, title: 'Innovaciones en gestión hospitalaria', category: 'Salud', description: 'Mejora de procesos en instituciones de salud.', location: 'Girardot', researchers: ['Milton Guanaco'], institution: 'Universidad de Cundinamarca', period: '2023-2024' }
+    { id: 1, title: 'Innovaciones en gestion hospitalaria', desc: 'Proyectos de alto impacto en areas del conocimiento.', image: 'assets/images/detalle-impacto.svg', researchers: [{name:'Mario Pelaez', role:'Ing Industrial'},{name:'Milton Guanaco', role:'Medico General'},{name:'Maria Milena', role:'Medica Cirujana'}], links: ['www.grupoinvestigacion.com','www.innovacionhospitalaria.com'] },
+    { id: 2, title: 'Recuperacion de suelos agricolas', desc: 'Metodologias para recuperacion de suelos por exceso de mal uso.', image: 'assets/images/detalle-impacto.svg', researchers: [{name:'Mario Pelaez', role:'Ing Industrial'}], links: ['www.grupoinvestigacion.com'] },
+    { id: 3, title: 'Innovacion en energias renovables', desc: 'Desarrollo de soluciones sostenibles.', image: 'assets/images/detalle-impacto.svg', researchers: [{name:'Milton Guanaco', role:'Medico General'}], links: [] }
   ];
   constructor(private route: ActivatedRoute) {}
   ngOnInit() {

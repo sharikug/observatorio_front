@@ -1,0 +1,89 @@
+.navbar {
+  width: 100%;
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: var(--topbar-height);
+  z-index: 150;
+}
+
+.navbar-accent {
+  height: 8px;
+  background: linear-gradient(90deg, var(--green-light) 0%, var(--green-medium) 100%);
+}
+
+.navbar-content {
+  width: 100%;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.navbar-nav li {
+  margin: 0;
+  display: inline-block;
+}
+
+.navbar-nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-dark);
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  transition: color 0.3s;
+  cursor: pointer;
+  position: relative;
+}
+
+.navbar-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--green-medium);
+  transition: width 0.3s ease;
+}
+
+.navbar-nav a:hover {
+  color: var(--green-dark);
+}
+
+.navbar-nav a:hover::after {
+  width: 100%;
+}
+
+.navbar-nav a.active {
+  color: var(--green-dark);
+  font-weight: 700;
+}
+
+.navbar-nav a.active::after {
+  width: 100%;
+  background: var(--green-dark);
+}
+
+.navbar-nav a i {
+  font-size: 14px;
+}

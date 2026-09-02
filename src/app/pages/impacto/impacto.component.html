@@ -1,22 +1,29 @@
-<section class="page-header">
-  <div class="container-custom"><h1>Casos de Impacto</h1><p>Descubre algunos de los casos de éxito derivados de proyectos de investigación</p></div>
-</section>
-<section class="filter-section">
-  <div class="container-custom">
-    <div class="filter-tags">
-      <button *ngFor="let cat of categories" class="filter-tag" [class.active]="selectedCategory === cat" (click)="filterCases(cat)">{{ cat }}</button>
-    </div>
+<section class="hero-banner">
+  <img src="assets/images/hero-impacto.svg" alt="Hero" class="hero-bg-image">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1><i class="fas fa-globe-americas"></i> Casos de Impacto</h1>
+    <p>Descubre algunos de los casos de exito derivados de proyectos de investigacion y desarrollo que han tenido un impacto en las comunidades y el entorno.</p>
   </div>
 </section>
+
 <section class="cases-section">
-  <div class="container-custom">
+  <div class="cases-container">
     <div class="cases-grid">
-      <div class="case-card" *ngFor="let impact of filteredCases">
-        <div class="case-header"><span class="case-category">{{ impact.category }}</span><span class="case-location">{{ impact.location }}</span></div>
-        <h3>{{ impact.title }}</h3>
-        <p>{{ impact.description }}</p>
-        <a [routerLink]="['/impacto', impact.id]" class="btn-detail">Ver detalle &rarr;</a>
+      <div class="case-card" *ngFor="let impact of impactCases" [class.active]="impact.active">
+        <div class="case-image">
+          <img [src]="impact.image" [alt]="impact.title">
+        </div>
+        <div class="case-body">
+          <h3><i class="fas fa-lightbulb"></i> {{ impact.title }}</h3>
+          <p *ngIf="impact.subtitle">{{ impact.subtitle }}</p>
+          <a *ngIf="impact.active" [routerLink]="['/impacto', impact.id]" class="read-more"><i class="fas fa-arrow-right"></i> leer mas.</a>
+        </div>
       </div>
+    </div>
+    <div class="cases-nav">
+      <button class="nav-arrow"><i class="fas fa-chevron-left"></i></button>
+      <button class="nav-arrow"><i class="fas fa-chevron-right"></i></button>
     </div>
   </div>
 </section>

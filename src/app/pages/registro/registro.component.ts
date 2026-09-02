@@ -11,12 +11,6 @@ import { RouterLink } from '@angular/router';
   styleUrl: './registro.component.scss'
 })
 export class RegistroComponent {
-  user = { nombres: '', apellidos: '', email: '', telefono: '', cargo: '', password: '', confirmPassword: '', acceptTerms: false, acceptData: false };
-  showPassword = false;
-  register() {
-    if (this.user.password !== this.user.confirmPassword) { alert('Las contraseñas no coinciden'); return; }
-    if (!this.user.acceptTerms || !this.user.acceptData) { alert('Debe aceptar los términos y condiciones'); return; }
-    alert('Registro exitoso...');
-  }
-  togglePassword() { this.showPassword = !this.showPassword; }
+  user = { nombres: '', apellidos: '', email: '', telefono: '', cargo: '', password: '', confirmPassword: '', acceptData: false, acceptTerms: false };
+  register() { alert('Registro exitoso...'); }
 }

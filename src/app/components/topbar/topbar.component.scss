@@ -1,0 +1,45 @@
+.topbar {
+  height: var(--topbar-height);
+  background: var(--bg-black);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+}
+
+.topbar-left {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.topbar-left a {
+  color: white;
+  font-size: 14px;
+  font-family: var(--font-body);
+  transition: opacity 0.3s;
+}
+
+.topbar-left a:hover {
+  opacity: 0.7;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-login {
+  background: linear-gradient(180deg, var(--green-light) 0%, var(--green-medium) 100%);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-family: var(--font-body);
+  transition: opacity 0.3s;
+}
+
+.btn-login:hover {
+  opacity: 0.9;
+}

@@ -1,27 +1,122 @@
-.auth-page { min-height: calc(100vh - 200px); display: flex; align-items: center; justify-content: center; padding: 3rem 1rem; background: #f9f9f9; }
-.auth-container { width: 100%; max-width: 420px; }
-.auth-card { background: #fff; border-radius: 16px; padding: 2.5rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
-.auth-header { text-align: center; margin-bottom: 2rem; }
-.brand-logo { display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; }
-.brand-icon { font-size: 1.8rem; color: #007b3e; }
-.brand-text { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.2rem; color: #00482b; }
-.auth-header h1 { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; color: #0c0f16; }
-.form-group { margin-bottom: 1.25rem; }
-.form-group label { display: block; font-weight: 600; font-size: 0.9rem; color: #0c0f16; margin-bottom: 0.5rem; }
-.form-group input { width: 100%; padding: 0.85rem 1rem; border: 1px solid #d8d8d8; border-radius: 8px; font-size: 0.95rem; transition: border-color 0.3s; }
-.form-group input:focus { outline: none; border-color: #007b3e; }
-.password-input { position: relative; }
-.password-input input { padding-right: 3rem; }
-.toggle-password { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.1rem; opacity: 0.5; }
-.toggle-password:hover { opacity: 1; }
-.form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
-.checkbox-label { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; color: #4d4d4d; cursor: pointer; }
-.checkbox-label input { width: auto; }
-.forgot-password { font-size: 0.85rem; color: #007b3e; }
-.forgot-password:hover { color: #00482b; }
-.btn-submit { width: 100%; padding: 0.9rem; background: #007b3e; color: #fff; border: none; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; transition: background 0.3s; }
-.btn-submit:hover { background: #00482b; }
-.auth-footer { text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #d8d8d8; }
-.auth-footer p { font-size: 0.9rem; color: #4d4d4d; }
-.auth-footer a { color: #007b3e; font-weight: 600; }
-.auth-footer a:hover { color: #00482b; }
+.hero-banner {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(121,192,0,0.85) 0%, rgba(0,123,62,0.85) 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 4rem 4rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-content h1 {
+  font-family: var(--font-title);
+  font-size: 56px;
+  color: white;
+  line-height: 1;
+  letter-spacing: -2px;
+}
+
+.login-section {
+  padding: 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 500px;
+}
+
+.login-form {
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 20px;
+  color: var(--green-medium);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-body);
+  font-size: 16px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--green-medium);
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 15px;
+  color: var(--green-medium);
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  width: auto;
+}
+
+.forgot {
+  font-size: 15px;
+  color: var(--green-medium);
+}
+
+.btn-submit {
+  background: linear-gradient(180deg, var(--green-medium) 0%, var(--green-dark) 100%);
+  color: white;
+  padding: 10px 40px;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  transition: opacity 0.3s;
+}
+
+.btn-submit:hover {
+  opacity: 0.9;
+}
+
+.register-link {
+  text-align: center;
+  font-size: 20px;
+  color: var(--green-medium);
+}
+
+.register-link a {
+  text-decoration: underline;
+}

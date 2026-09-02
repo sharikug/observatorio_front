@@ -11,18 +11,26 @@ import { RouterLink } from '@angular/router';
 })
 export class HomeComponent {
   stats = [
-    { number: '250+', label: 'Proyectos Activos', icon: 'P' },
-    { number: '50K+', label: 'Personas Impactadas', icon: 'I' },
-    { number: '180', label: 'Producción Científica', icon: 'C' },
-    { number: '80+', label: 'Investigadores', icon: 'V' }
+    { number: '250+', label: 'Proyectos Activos' },
+    { number: '180', label: 'Investigadores' },
+    { number: '15', label: 'Grupos de Investigacion' },
+    { number: '50K+', label: 'Personas Impactadas' }
   ];
-  impactCases = [
-    { id: 1, title: 'Transferencia tecnológica y desarrollo de soluciones', category: 'Innovación', description: 'Proyectos de alto impacto en diversas áreas del conocimiento.' },
-    { id: 2, title: 'Innovación en energías renovables', category: 'Energía', description: 'Desarrollo de soluciones sostenibles para comunidades.' },
-    { id: 3, title: 'Innovaciones en gestión hospitalaria', category: 'Salud', description: 'Mejora de procesos en instituciones de salud.' },
-    { id: 4, title: 'Plataforma educativa digital para inclusión', category: 'Educación', description: 'Herramientas digitales para la inclusión educativa.' },
-    { id: 5, title: 'Programa de desarrollo tecnológico', category: 'Tecnología', description: 'Formación en nuevas tecnologías para el desarrollo.' },
-    { id: 6, title: 'Recuperación de suelos agrícolas', category: 'Medio Ambiente', description: 'Técnicas para recuperación de suelos por mal uso.' }
+
+  features = [
+    { title: 'Investigacion Cientifica', desc: 'Proyectos de alto impacto en diversas areas del conocimiento.', icon: 'fas fa-flask' },
+    { title: 'Analisis de Datos', desc: 'Metricas e indicadores de investigacion en tiempo real.', icon: 'fas fa-chart-line' },
+    { title: 'Colaboracion', desc: 'Red de investigadores y alianzas estrategicas.', icon: 'fas fa-users' },
+    { title: 'Innovacion', desc: 'Transferencia tecnologica y desarrollo de soluciones.', icon: 'fas fa-lightbulb' }
   ];
-  regions = ['FUSAGASUGÁ', 'CHÍA', 'GIRARDOT', 'SOACHA', 'ZIPAQUIRÁ', 'FACATATIVÁ'];
+
+  regions = [
+    { name: 'GIRARDOT', color: '#79c000' },
+    { name: 'FACATATIVA', color: '#00482b' },
+    { name: 'FUSAGASUGA', color: '#007b3e' },
+    { name: 'CHIA', color: '#4d4d4d' },
+    { name: 'ZIPAQUIRA', color: '#f7931e' },
+    { name: 'UBATA', color: '#daaa00' },
+    { name: 'SOACHA', color: '#00a99d' }
+  ];
 }
