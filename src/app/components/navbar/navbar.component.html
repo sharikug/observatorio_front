@@ -1,0 +1,24 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <a routerLink="/home" class="navbar-brand">
+      <span class="brand-icon">O</span>
+      <div class="brand-text">
+        <span class="brand-title">Observatorio</span>
+        <span class="brand-subtitle">de Investigación</span>
+      </div>
+    </a>
+    <button class="menu-toggle" (click)="toggleMenu()" [class.active]="isMenuOpen">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="navbar-menu" [class.open]="isMenuOpen">
+      <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="isMenuOpen = false">Inicio</a></li>
+      <li><a routerLink="/investigacion" routerLinkActive="active" (click)="isMenuOpen = false">Investigación</a></li>
+      <li><a routerLink="/impacto" routerLinkActive="active" (click)="isMenuOpen = false">Impacto</a></li>
+      <li><a routerLink="/reportes" routerLinkActive="active" (click)="isMenuOpen = false">Reportes</a></li>
+    </ul>
+    <div class="navbar-actions">
+      <a routerLink="/login" class="btn-login">Iniciar Sesión</a>
+      <a routerLink="/registro" class="btn-register">Registro</a>
+    </div>
+  </div>
+</nav>

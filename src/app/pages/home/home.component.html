@@ -1,0 +1,95 @@
+<section class="hero-section">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="container-custom">
+      <div class="hero-grid">
+        <div class="hero-text">
+          <h1><span class="text-accent">Observatorio</span> de Investigación</h1>
+          <p class="hero-subtitle">Resultados De Impacto Regional</p>
+          <p class="hero-desc">El Observatorio de Investigación de la Universidad de Cundinamarca es un espacio dedicado al seguimiento, análisis y promoción de la actividad científica y tecnológica de la institución.</p>
+          <div class="hero-actions">
+            <a routerLink="/investigacion" class="btn-primary">Explorar Investigación</a>
+            <a routerLink="/impacto" class="btn-outline">Ver Impacto</a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="card-icon">I+T</div>
+            <h3>Ciencia & Tecnología</h3>
+            <p>Impulsando el desarrollo territorial mediante investigación aplicada</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="container-custom">
+    <div class="stats-grid">
+      <div class="stat-card" *ngFor="let stat of stats">
+        <div class="stat-icon" [innerHTML]="stat.icon"></div>
+        <div class="stat-number">{{ stat.number }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="mission-section">
+  <div class="container-custom">
+    <div class="mission-grid">
+      <div class="mission-card">
+        <h3>Misión</h3>
+        <p>Promover y fortalecer la investigación científica, tecnológica e innovación en la Universidad de Cundinamarca, contribuyendo al desarrollo regional y nacional a través de proyectos de alto impacto.</p>
+      </div>
+      <div class="mission-card vision">
+        <h3>Visión</h3>
+        <p>Ser reconocidos en 2030 como un observatorio líder en investigación científica y tecnológica a nivel nacional, referente en la producción de conocimiento aplicado e innovación.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="director-section">
+  <div class="container-custom">
+    <div class="director-grid">
+      <div class="director-image"><div class="image-placeholder"><span>Dir</span></div></div>
+      <div class="director-content">
+        <h3>Palabras del director</h3>
+        <blockquote>"La Universidad de Cundinamarca impulsa el desarrollo territorial mediante investigación aplicada diseñada para resolver las necesidades reales de la sociedad."</blockquote>
+        <div class="director-info">
+          <strong>Dr. María Alejandra González</strong>
+          <span>Directora de Investigación</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="impact-section">
+  <div class="container-custom">
+    <div class="section-header"><h2 class="section-title">Casos de Impacto</h2><p class="section-subtitle">Descubre algunos de los casos de éxito derivados de proyectos de investigación</p></div>
+    <div class="impact-grid">
+      <div class="impact-card" *ngFor="let impact of impactCases">
+        <div class="impact-category">{{ impact.category }}</div>
+        <h4>{{ impact.title }}</h4>
+        <p>{{ impact.description }}</p>
+        <a [routerLink]="['/impacto', impact.id]" class="read-more">Leer más &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="region-section">
+  <div class="container-custom">
+    <h2 class="section-title text-center">Presencia Regional</h2>
+    <p class="section-subtitle text-center">Nuestro impacto llega a múltiples municipios de Cundinamarca</p>
+    <div class="region-grid">
+      <div class="region-card" *ngFor="let region of regions">
+        <span class="region-icon">Ub</span>
+        <span class="region-name">{{ region }}</span>
+      </div>
+    </div>
+  </div>
+</section>

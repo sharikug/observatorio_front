@@ -1,0 +1,26 @@
+.page-header { background: linear-gradient(135deg, #00482b, #007b3e); color: #fff; padding: 4rem 0; text-align: center; }
+.page-header h1 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin-bottom: 0.5rem; }
+.page-header p { font-size: 1.1rem; opacity: 0.9; }
+.metrics-section { padding: 4rem 0; margin-top: -2rem; position: relative; z-index: 2; }
+.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+.metric-card { background: #fff; border-radius: 16px; padding: 2rem; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+.metric-value { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; font-weight: 700; color: #00482b; }
+.metric-label { font-size: 0.95rem; color: #4d4d4d; margin: 0.5rem 0; }
+.metric-trend { font-size: 0.85rem; color: #79c000; font-weight: 600; }
+.faculties-section { padding: 4rem 0; background: #f9f9f9; }
+.faculties-list { max-width: 800px; margin: 2rem auto 0; }
+.faculty-item { margin-bottom: 1.5rem; }
+.faculty-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.faculty-name { font-weight: 600; color: #0c0f16; }
+.faculty-count { font-size: 0.9rem; color: #a6a6a6; }
+.progress-bar { height: 10px; background: #d8d8d8; border-radius: 5px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(90deg, #007b3e, #79c000); border-radius: 5px; transition: width 0.8s ease; }
+.timeline-section { padding: 4rem 0; }
+.timeline-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 2rem; }
+.timeline-card { background: #fff; border: 1px solid #d8d8d8; border-radius: 12px; padding: 1.5rem; text-align: center; transition: all 0.3s; }
+.timeline-card:hover { border-color: #007b3e; box-shadow: 0 5px 15px rgba(0,72,43,0.1); }
+.timeline-year { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.3rem; color: #00482b; margin-bottom: 1rem; }
+.timeline-data { display: flex; flex-direction: column; gap: 0.75rem; }
+.data-value { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.2rem; color: #0c0f16; }
+.data-label { font-size: 0.8rem; color: #a6a6a6; }
+@media (max-width: 768px) { .metrics-grid, .timeline-grid { grid-template-columns: repeat(2, 1fr); } }

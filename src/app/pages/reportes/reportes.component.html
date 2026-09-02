@@ -1,0 +1,40 @@
+<section class="page-header">
+  <div class="container-custom"><h1>Generador de Reportes</h1><p>Obtenga un reporte personalizado de la información que requieras</p></div>
+</section>
+<section class="report-section">
+  <div class="container-custom">
+    <div class="report-grid">
+      <div class="report-form-card">
+        <p class="form-notice">Selecciona los filtros de búsqueda para obtener información personalizada.</p>
+        <p class="form-notice warning">Recuerda registrarte para poder generar documentos.</p>
+        <form (ngSubmit)="generateReport()">
+          <div class="form-row">
+            <div class="form-group"><label>Fecha Inicial</label><input type="date" [(ngModel)]="filters.fechaInicio" name="fechaInicio"></div>
+            <div class="form-group"><label>Fecha Final</label><input type="date" [(ngModel)]="filters.fechaFin" name="fechaFin"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Tipo de Información</label><select [(ngModel)]="filters.tipoInformacion" name="tipoInformacion"><option *ngFor="let tipo of tiposInformacion" [value]="tipo">{{ tipo }}</option></select></div>
+            <div class="form-group"><label>Estado del Proyecto</label><select [(ngModel)]="filters.estadoProyecto" name="estadoProyecto"><option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Facultad</label><select [(ngModel)]="filters.facultad" name="facultad"><option *ngFor="let fac of facultades" [value]="fac">{{ fac }}</option></select></div>
+            <div class="form-group"><label>Programa Académico</label><select [(ngModel)]="filters.programa" name="programa"><option value="">Todos</option></select></div>
+          </div>
+          <div class="form-group"><label>Grupo de Investigación</label><select [(ngModel)]="filters.grupoInvestigacion" name="grupoInvestigacion"><option value="">Todos</option></select></div>
+          <div class="form-actions">
+            <button type="button" class="btn-preview" (click)="previewReport()">Vista previa</button>
+            <button type="submit" class="btn-generate">Generar</button>
+          </div>
+        </form>
+      </div>
+      <div class="reports-history">
+        <h3>Historial de Archivos Generados</h3>
+        <div class="history-item" *ngFor="let report of generatedReports">
+          <div class="report-icon">Doc</div>
+          <div class="report-info"><span class="report-name">{{ report.name }}</span><span class="report-meta">{{ report.date }} &middot; {{ report.size }}</span></div>
+          <button class="btn-download">Descargar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

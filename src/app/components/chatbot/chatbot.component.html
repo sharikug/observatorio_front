@@ -1,0 +1,25 @@
+<div class="chatbot-container" [class.open]="isOpen">
+  <button class="chat-toggle" (click)="toggleChat()">
+    <span *ngIf="!isOpen">Chat</span>
+    <span *ngIf="isOpen">X</span>
+  </button>
+  <div class="chat-window" *ngIf="isOpen">
+    <div class="chat-header">
+      <span class="bot-avatar">IA</span>
+      <div><span class="bot-name">Asistente IA</span><span class="bot-status">En línea</span></div>
+    </div>
+    <div class="chat-messages">
+      <div class="message" *ngFor="let msg of messages" [class.user]="msg.isUser" [class.bot]="!msg.isUser">
+        <span>{{ msg.text }}</span>
+      </div>
+    </div>
+    <div class="sample-questions" *ngIf="messages.length <= 1">
+      <p>Preguntas frecuentes:</p>
+      <button *ngFor="let q of sampleQuestions" class="sample-btn" (click)="askQuestion(q)">{{ q }}</button>
+    </div>
+    <div class="chat-input">
+      <input type="text" [(ngModel)]="message" placeholder="Escribe tu pregunta..." (keyup.enter)="sendMessage()">
+      <button class="send-btn" (click)="sendMessage()">Enviar</button>
+    </div>
+  </div>
+</div>

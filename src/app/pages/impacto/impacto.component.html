@@ -1,0 +1,22 @@
+<section class="page-header">
+  <div class="container-custom"><h1>Casos de Impacto</h1><p>Descubre algunos de los casos de éxito derivados de proyectos de investigación</p></div>
+</section>
+<section class="filter-section">
+  <div class="container-custom">
+    <div class="filter-tags">
+      <button *ngFor="let cat of categories" class="filter-tag" [class.active]="selectedCategory === cat" (click)="filterCases(cat)">{{ cat }}</button>
+    </div>
+  </div>
+</section>
+<section class="cases-section">
+  <div class="container-custom">
+    <div class="cases-grid">
+      <div class="case-card" *ngFor="let impact of filteredCases">
+        <div class="case-header"><span class="case-category">{{ impact.category }}</span><span class="case-location">{{ impact.location }}</span></div>
+        <h3>{{ impact.title }}</h3>
+        <p>{{ impact.description }}</p>
+        <a [routerLink]="['/impacto', impact.id]" class="btn-detail">Ver detalle &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>

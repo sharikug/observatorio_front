@@ -1,0 +1,30 @@
+.page-header { background: linear-gradient(135deg, #00482b, #007b3e); color: #fff; padding: 4rem 0; text-align: center; }
+.page-header h1 { font-family: 'Montserrat', sans-serif; font-size: 2.5rem; margin-bottom: 0.5rem; }
+.page-header p { font-size: 1.1rem; opacity: 0.9; }
+.report-section { padding: 4rem 0; }
+.report-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; }
+.report-form-card { background: #fff; border: 1px solid #d8d8d8; border-radius: 12px; padding: 2rem; }
+.form-notice { font-size: 0.9rem; color: #4d4d4d; margin-bottom: 0.5rem; }
+.form-notice.warning { color: #f7931e; font-weight: 500; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.form-group { margin-bottom: 1.5rem; }
+.form-group label { display: block; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.9rem; color: #0c0f16; margin-bottom: 0.5rem; }
+.form-group input, .form-group select { width: 100%; padding: 0.75rem 1rem; border: 1px solid #d8d8d8; border-radius: 8px; font-size: 0.9rem; color: #0c0f16; transition: border-color 0.3s; }
+.form-group input:focus, .form-group select:focus { outline: none; border-color: #007b3e; }
+.form-actions { display: flex; gap: 1rem; margin-top: 1rem; }
+.form-actions button { padding: 0.85rem 2rem; border-radius: 8px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.3s; }
+.btn-preview { background: #fff; border: 1px solid #d8d8d8; color: #4d4d4d; }
+.btn-preview:hover { border-color: #007b3e; color: #007b3e; }
+.btn-generate { background: #007b3e; border: none; color: #fff; }
+.btn-generate:hover { background: #00482b; }
+.reports-history { background: #fff; border: 1px solid #d8d8d8; border-radius: 12px; padding: 1.5rem; }
+.reports-history h3 { font-family: 'Montserrat', sans-serif; font-size: 1.1rem; color: #00482b; margin-bottom: 1.25rem; }
+.history-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem; border: 1px solid #d8d8d8; border-radius: 8px; margin-bottom: 0.75rem; transition: all 0.3s; }
+.history-item:hover { border-color: #007b3e; }
+.report-icon { font-size: 1.5rem; }
+.report-info { flex: 1; }
+.report-name { display: block; font-weight: 600; font-size: 0.9rem; color: #0c0f16; }
+.report-meta { font-size: 0.8rem; color: #a6a6a6; }
+.btn-download { background: #edf2c2; border: none; border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 1.1rem; cursor: pointer; }
+.btn-download:hover { background: #007b3e; color: #fff; }
+@media (max-width: 768px) { .report-grid, .form-row { grid-template-columns: 1fr; } }

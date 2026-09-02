@@ -1,0 +1,29 @@
+.navbar { background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 1000; }
+.navbar-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 0.75rem 1.5rem; }
+.navbar-brand { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+.brand-icon { font-size: 1.8rem; color: #007b3e; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.1rem; color: #00482b; }
+.brand-subtitle { font-family: 'Montserrat', sans-serif; font-weight: 400; font-size: 0.75rem; color: #4d4d4d; }
+.navbar-menu { display: flex; list-style: none; gap: 2rem; margin: 0; padding: 0; }
+.navbar-menu li a { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.95rem; color: #0c0f16; padding: 0.5rem 0; position: relative; transition: color 0.3s; }
+.navbar-menu li a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: #007b3e; transition: width 0.3s; }
+.navbar-menu li a:hover, .navbar-menu li a.active { color: #007b3e; }
+.navbar-menu li a:hover::after, .navbar-menu li a.active::after { width: 100%; }
+.navbar-actions { display: flex; gap: 0.75rem; align-items: center; }
+.btn-login { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.9rem; color: #00482b; padding: 0.5rem 1rem; border: 1px solid #00482b; border-radius: 6px; transition: all 0.3s; }
+.btn-login:hover { background: #00482b; color: #fff; }
+.btn-register { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: 0.9rem; color: #fff; padding: 0.5rem 1rem; background: #007b3e; border-radius: 6px; transition: all 0.3s; }
+.btn-register:hover { background: #00482b; }
+.menu-toggle { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 0.5rem; }
+.menu-toggle span { width: 25px; height: 3px; background: #00482b; border-radius: 2px; transition: all 0.3s; }
+.menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.menu-toggle.active span:nth-child(2) { opacity: 0; }
+.menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+@media (max-width: 768px) {
+  .menu-toggle { display: flex; }
+  .navbar-menu { position: absolute; top: 100%; left: 0; right: 0; background: #fff; flex-direction: column; gap: 0; padding: 1rem 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: none; }
+  .navbar-menu.open { display: flex; }
+  .navbar-menu li { padding: 0.75rem 0; border-bottom: 1px solid #d8d8d8; }
+  .navbar-actions { display: none; }
+}
