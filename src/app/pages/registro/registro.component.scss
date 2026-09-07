@@ -8,11 +8,15 @@
 .form-group { margin-bottom: 1.5rem; }
 .form-group label { display: block; font-family: var(--font-body); font-size: 20px; color: var(--green-medium); margin-bottom: 0.5rem; }
 .form-group input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-family: var(--font-body); font-size: 16px; }
+.form-group .rol-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-family: var(--font-body); font-size: 16px; background: var(--bg-white); }
 .form-group input:focus { outline: none; border-color: var(--green-medium); }
+.form-group .rol-select:focus { outline: none; border-color: var(--green-medium); }
 .form-checkboxes { margin-bottom: 2rem; }
 .checkbox-label { display: flex; align-items: center; gap: 0.5rem; font-size: 15px; color: var(--green-medium); cursor: pointer; margin-bottom: 0.75rem; }
 .checkbox-label input { width: auto; }
 .btn-submit { background: linear-gradient(180deg, var(--green-medium) 0%, var(--green-dark) 100%); color: white; padding: 10px 40px; border: none; border-radius: 8px; font-family: var(--font-body); font-size: 16px; cursor: pointer; width: 100%; transition: opacity 0.3s; }
 .btn-submit:hover { opacity: 0.9; }
+.btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.error-message { background: rgba(220, 53, 69, 0.1); border: 1px solid #dc3545; color: #dc3545; padding: 10px 12px; border-radius: 4px; margin-bottom: 1.5rem; font-size: 15px; }
 .login-link { text-align: center; font-size: 20px; color: var(--green-medium); margin-top: 1.5rem; }
 .login-link a { text-decoration: underline; }

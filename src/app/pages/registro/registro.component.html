@@ -9,6 +9,8 @@
 <section class="register-section">
   <div class="register-container">
     <form (ngSubmit)="register()" class="register-form">
+      <div *ngIf="errorMessage" class="error-message"><i class="fas fa-exclamation-circle"></i> {{ errorMessage }}</div>
+      <div class="form-group"><label><i class="fas fa-id-card"></i> Numero de documento</label><input type="text" [(ngModel)]="user.cedula" name="cedula" required></div>
       <div class="form-row">
         <div class="form-group"><label><i class="fas fa-user"></i> Nombres</label><input type="text" [(ngModel)]="user.nombres" name="nombres"></div>
         <div class="form-group"><label><i class="fas fa-user"></i> Apellidos</label><input type="text" [(ngModel)]="user.apellidos" name="apellidos"></div>
@@ -16,7 +18,11 @@
       <div class="form-group"><label><i class="fas fa-envelope"></i> Correo Electronico</label><input type="email" [(ngModel)]="user.email" name="email"></div>
       <div class="form-row">
         <div class="form-group"><label><i class="fas fa-phone"></i> Telefono</label><input type="tel" [(ngModel)]="user.telefono" name="telefono"></div>
-        <div class="form-group"><label><i class="fas fa-briefcase"></i> Cargo</label><input type="text" [(ngModel)]="user.cargo" name="cargo"></div>
+        <div class="form-group"><label><i class="fas fa-user-tag"></i> Rol</label>
+          <select [(ngModel)]="user.rol" name="rol" class="rol-select">
+            <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option>
+          </select>
+        </div>
       </div>
       <div class="form-group"><label><i class="fas fa-lock"></i> Contrasena</label><input type="password" [(ngModel)]="user.password" name="password"></div>
       <div class="form-group"><label><i class="fas fa-lock"></i> Confirmacion de contrasena</label><input type="password" [(ngModel)]="user.confirmPassword" name="confirmPassword"></div>
@@ -24,7 +30,7 @@
         <label class="checkbox-label"><input type="checkbox" [(ngModel)]="user.acceptData" name="acceptData"><span><i class="fas fa-check-square"></i> Acepto el tratamiento de datos personales</span></label>
         <label class="checkbox-label"><input type="checkbox" [(ngModel)]="user.acceptTerms" name="acceptTerms"><span><i class="fas fa-check-square"></i> Acepto los terminos y condiciones</span></label>
       </div>
-      <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Registrarse</button>
+      <button type="submit" class="btn-submit" [disabled]="loading"><i class="fas fa-paper-plane"></i> {{ loading ? 'Registrando...' : 'Registrarse' }}</button>
     </form>
     <p class="login-link">Ya tienes cuenta? <a routerLink="/login"><i class="fas fa-sign-in-alt"></i> Iniciar sesion</a></p>
   </div>

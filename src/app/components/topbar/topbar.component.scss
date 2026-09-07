@@ -43,3 +43,15 @@
 .btn-login:hover {
   opacity: 0.9;
 }
+
+.btn-logout {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+}
+
+.user-name {
+  color: white;
+  font-size: 13px;
+  font-family: var(--font-body);
+}
