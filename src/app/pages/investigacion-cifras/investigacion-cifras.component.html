@@ -7,16 +7,64 @@
   </div>
 </section>
 
-<section class="charts-section">
-  <div class="charts-container">
-    <div class="chart-card" *ngFor="let chart of charts">
-      <div class="chart-header">
-        <i class="fas fa-chart-pie"></i>
-        <span>Datos de investigacion</span>
-      </div>
-      <div class="chart-body">
-        <img [src]="chart.image" alt="Chart">
+@if (loading) {
+  <section class="charts-section">
+    <div class="charts-container">
+      <div class="loading-box"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div>
+    </div>
+  </section>
+} @else if (error) {
+  <section class="charts-section">
+    <div class="charts-container">
+      <div class="error-box"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>
+    </div>
+  </section>
+} @else {
+  <section class="powerbi-section">
+    <div class="powerbi-container">
+      @if (isLoggedIn && safePowerBiUrl) {
+        <div class="powerbi-header"><i class="fas fa-chart-pie"></i> Reporte Interactivo de Power BI</div>
+        <iframe [src]="safePowerBiUrl" title="Reporte Power BI" allowFullScreen></iframe>
+      } @else if (isLoggedIn) {
+        <div class="powerbi-placeholder">
+          <i class="fab fa-microsoft"></i>
+          <h3>Reporte de Power BI</h3>
+          <p>Para mostrar tu reporte: en <b>app.powerbi.com</b> ve a <b>Archivo &rarr; Publicar en web</b> y pega el enlace en <code>src/assets/data/investigacion.json</code> (campo <code>powerBiUrl</code>).</p>
+        </div>
+      } @else {
+        <div class="powerbi-placeholder lock">
+          <i class="fas fa-lock"></i>
+          <h3>Reporte exclusivo</h3>
+          <p>El reporte de Power BI esta disponible solo para usuarios autenticados. Inicia sesion para verlo.</p>
+          <a routerLink="/login" class="btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar sesion</a>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="kpi-section">
+    <div class="kpis-grid">
+      <div class="kpi-card" *ngFor="let kpi of kpis">
+        <div class="kpi-icon"><i class="{{ kpi.icon }}"></i></div>
+        <div class="kpi-info">
+          <span class="kpi-value">{{ kpi.value }}</span>
+          <span class="kpi-label">{{ kpi.label }}</span>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+
+  <section class="charts-section">
+    <div class="charts-container">
+      <div class="chart-card" *ngFor="let chart of charts">
+        <div class="chart-header">
+          <i class="{{ chart.icon }}"></i>
+          <span>{{ chart.title }}</span>
+        </div>
+        <div class="chart-body">
+          <div [id]="'chart-' + chart.id" class="chart"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+}

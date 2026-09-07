@@ -40,4 +40,8 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+
+  getRol(): string | null {
+    return localStorage.getItem('rol');
+  }
 }
