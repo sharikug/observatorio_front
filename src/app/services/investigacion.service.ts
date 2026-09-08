@@ -13,3 +13,4 @@ export class InvestigacionService {
     return this.http.get<InvestigacionData>(this.dataUrl);
   }
 }
+
