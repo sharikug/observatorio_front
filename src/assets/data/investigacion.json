@@ -1,0 +1,50 @@
+{
+  "kpis": [
+    { "icon": "fas fa-file-alt", "value": "150", "label": "Articulos publicados" },
+    { "icon": "fas fa-users", "value": "85", "label": "Investigadores activos" },
+    { "icon": "fas fa-project-diagram", "value": "32", "label": "Proyectos en curso" },
+    { "icon": "fas fa-book", "value": "12", "label": "Libros publicados" }
+  ],
+  "charts": [
+    {
+      "id": "publicaciones-por-anio",
+      "type": "bar",
+      "title": "Publicaciones por anio",
+      "icon": "fas fa-chart-bar",
+      "categories": ["2020", "2021", "2022", "2023", "2024"],
+      "series": [
+        { "name": "Articulos", "data": [28, 35, 42, 50, 58] },
+        { "name": "Libros", "data": [3, 2, 4, 1, 5] }
+      ]
+    },
+    {
+      "id": "inversion-por-area",
+      "type": "pie",
+      "title": "Inversion por area",
+      "icon": "fas fa-chart-pie",
+      "series": [
+        {
+          "name": "Inversion",
+          "data": [
+            { "name": "Ciencias de la Salud", "value": 30 },
+            { "name": "Ingenieria", "value": 25 },
+            { "name": "Ciencias Sociales", "value": 20 },
+            { "name": "Educacion", "value": 15 },
+            { "name": "Agronomia", "value": 10 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tendencia-investigadores",
+      "type": "line",
+      "title": "Tendencia de investigadores activos",
+      "icon": "fas fa-chart-line",
+      "categories": ["2020", "2021", "2022", "2023", "2024"],
+      "series": [
+        { "name": "Investigadores", "data": [45, 52, 60, 72, 85] }
+      ]
+    }
+  ],
+  "powerBiUrl": ""
+}
