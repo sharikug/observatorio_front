@@ -1,0 +1,109 @@
+<section class="hero-banner">
+  <img src="assets/images/hero-investigacion.svg" alt="" class="hero-bg-image">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1><i class="fas fa-project-diagram"></i> Proyectos de investigacion</h1>
+    <p>Evolucion, orientacion y distribucion del portafolio de proyectos</p>
+  </div>
+</section>
+
+@if (cargando) {
+  <section class="estado"><div class="estado-box"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div></section>
+} @else if (error) {
+  <section class="estado"><div class="estado-box error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div></section>
+} @else {
+  <section class="filtros">
+    <div class="filtros-container">
+      <div class="filtro"><label>Anio</label><select [(ngModel)]="filtros.year" (ngModelChange)="aplicar()"><option value="ALL">Todos</option>@for (v of opciones.year; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Convocatoria</label><select [(ngModel)]="filtros.conv" (ngModelChange)="aplicar()"><option value="ALL">Todas</option>@for (v of opciones.conv; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Facultad</label><select [(ngModel)]="filtros.faculty" (ngModelChange)="aplicar()"><option value="ALL">Todas</option>@for (v of opciones.faculty; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Unidad regional</label><select [(ngModel)]="filtros.regional" (ngModelChange)="aplicar()"><option value="ALL">Todas</option>@for (v of opciones.regional; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Tipo de investigacion</label><select [(ngModel)]="filtros.researchType" (ngModelChange)="aplicar()"><option value="ALL">Todos</option>@for (v of opciones.researchType; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Convenio</label><select [(ngModel)]="filtros.convenio" (ngModelChange)="aplicar()"><option value="ALL">Todos</option>@for (v of opciones.convenio; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Programa</label><select [(ngModel)]="filtros.program" (ngModelChange)="aplicar()"><option value="ALL">Todos</option>@for (v of opciones.program; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <button type="button" class="btn-restablecer" (click)="restablecer()"><i class="fas fa-rotate-left"></i> Restablecer</button>
+    </div>
+  </section>
+
+  @if (sinDatos) {
+    <section class="estado"><div class="estado-box">No existen datos para los filtros seleccionados.</div></section>
+  } @else {
+    <section class="kpi-section">
+      <div class="kpis-grid">
+        @for (k of kpis; track k.label) {
+          <div class="kpi-card">
+            <span class="kpi-value">{{ k.value }}</span>
+            <span class="kpi-label">{{ k.label }}</span>
+            <span class="kpi-sub">{{ k.sub }}</span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="charts-section">
+      <div class="charts-container">
+        <div class="chart-card ancho-2">
+          <div class="chart-header"><i class="fas fa-chart-column"></i><span>Evolucion del portafolio</span></div>
+          <div class="chart-body"><div id="chart-evolucion" class="chart"></div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-chart-pie"></i><span>Orientacion de la investigacion</span></div>
+          <div class="chart-body"><div id="chart-orientacion" class="chart"></div></div>
+        </div>
+        <div class="chart-card ancho-2">
+          <div class="chart-header"><i class="fas fa-table-cells"></i><span>Distribucion por facultad y unidad regional</span></div>
+          <div class="chart-body"><div id="chart-heatmap" class="chart"></div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-layer-group"></i><span>Lineas institucionales</span></div>
+          <div class="chart-body"><div id="chart-lineas" class="chart"></div></div>
+        </div>
+        <div class="chart-card ancho-2">
+          <div class="chart-header"><i class="fas fa-quote-left"></i><span>Tematicas de los objetivos</span></div>
+          <div class="chart-body nube-body"><div class="nube" [innerHTML]="nube"></div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-globe"></i><span>Objetivos de desarrollo sostenible</span></div>
+          <div class="chart-body"><div id="chart-ods" class="chart"></div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-users"></i><span>Estructura de equipos</span></div>
+          <div class="chart-body"><div id="chart-equipos" class="chart"></div></div>
+        </div>
+        <div class="chart-card ancho-2">
+          <div class="chart-header"><i class="fas fa-calendar-check"></i><span>Proyectos por convocatoria</span></div>
+          <div class="chart-body"><div id="chart-convocatorias" class="chart"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tabla-section">
+      <div class="tabla-container">
+        <h2><i class="fas fa-list"></i> Detalle de proyectos <span class="conteo">{{ detalle.length }}</span></h2>
+        <div class="tabla-scroll">
+          <table>
+            <thead>
+              <tr><th>Anio</th><th>Convocatoria</th><th>Codigo</th><th>Proyecto</th><th>Investigador principal</th><th>Facultad</th><th>Regional</th><th>Tipo</th><th>Equipo</th><th>ODS</th></tr>
+            </thead>
+            <tbody>
+              @for (d of detalle; track d.code) {
+                <tr>
+                  <td>{{ d.year }}</td>
+                  <td>{{ d.conv }}</td>
+                  <td><span class="badge">{{ d.code }}</span></td>
+                  <td class="proyecto">{{ d.project }}</td>
+                  <td>{{ d.pi || '—' }}</td>
+                  <td>{{ d.faculty || '—' }}</td>
+                  <td>{{ d.regional || '—' }}</td>
+                  <td>{{ d.researchType || '—' }}</td>
+                  <td>{{ d.teamSize ?? '—' }}</td>
+                  <td>{{ d.ods.length ? 'ODS ' + d.ods.join(', ') : '—' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  }
+}

@@ -1,0 +1,98 @@
+<section class="hero-banner">
+  <img src="assets/images/hero-investigacion.svg" alt="" class="hero-bg-image">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1><i class="fas fa-users"></i> Grupos de investigacion</h1>
+    <p>Participacion, liderazgo y colaboracion de los grupos en los proyectos</p>
+  </div>
+</section>
+
+@if (cargando) {
+  <section class="estado"><div class="estado-box"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div></section>
+} @else if (error) {
+  <section class="estado"><div class="estado-box error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div></section>
+} @else {
+  <section class="filtros">
+    <div class="filtros-container">
+      <div class="filtro"><label>Anio</label><select [(ngModel)]="filtros.year" (ngModelChange)="aplicar()"><option value="ALL">Todos</option>@for (v of opciones.year; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Convocatoria</label><select [(ngModel)]="filtros.conv" (ngModelChange)="aplicar()"><option value="ALL">Todas</option>@for (v of opciones.conv; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Facultad</label><select [(ngModel)]="filtros.faculty" (ngModelChange)="aplicar()"><option value="ALL">Todas</option>@for (v of opciones.faculty; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Sede</label><select [(ngModel)]="filtros.regional" (ngModelChange)="aplicar()"><option value="ALL">Todas</option>@for (v of opciones.regional; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Programa</label><select [(ngModel)]="filtros.program" (ngModelChange)="aplicar()"><option value="ALL">Todos</option>@for (v of opciones.program; track v) {<option [value]="v">{{ v }}</option>}</select></div>
+      <div class="filtro"><label>Grupo</label><select [(ngModel)]="filtros.group" (ngModelChange)="aplicar()"><option value="ALL">Todos</option>@for (v of opciones.group; track v) {<option [value]="v">{{ display(v) }}</option>}</select></div>
+      <button type="button" class="btn-restablecer" (click)="restablecer()"><i class="fas fa-rotate-left"></i> Restablecer</button>
+    </div>
+  </section>
+
+  @if (sinDatos) {
+    <section class="estado"><div class="estado-box">No existen datos para los filtros seleccionados.</div></section>
+  } @else {
+    <section class="kpi-section">
+      <div class="kpis-grid">
+        @for (k of kpis; track k.label) {
+          <div class="kpi-card">
+            <span class="kpi-value">{{ k.value }}</span>
+            <span class="kpi-label">{{ k.label }}</span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <section class="charts-section">
+      <div class="charts-container">
+        <div class="chart-card ancho-2">
+          <div class="chart-header"><i class="fas fa-table-cells"></i><span>Actividad de los grupos en el tiempo</span></div>
+          <div class="chart-body"><div id="chart-heatmap-grupos" class="chart"></div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-sitemap"></i><span>Estructura institucional</span></div>
+          <div class="chart-body"><div id="chart-sunburst" class="chart"></div></div>
+        </div>
+        <div class="chart-card ancho-2">
+          <div class="chart-header"><i class="fas fa-share-nodes"></i><span>Red de colaboracion</span></div>
+          <div class="chart-body"><div id="chart-sankey" class="chart"></div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-braille"></i><span>Liderazgo y aliados</span></div>
+          <div class="chart-body"><div id="chart-bubble" class="chart"></div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-user-tie"></i><span>Roles</span></div>
+          <div class="chart-body"><div id="chart-roles" class="chart"></div></div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-map-location-dot"></i><span>Distribucion territorial</span></div>
+          <div class="chart-body"><div id="chart-territorial" class="chart"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tabla-section">
+      <div class="tabla-container">
+        <h2><i class="fas fa-list"></i> Directorio analitico de grupos <span class="conteo">{{ detalle.length }}</span></h2>
+        <div class="tabla-scroll">
+          <table>
+            <thead>
+              <tr><th>Grupo</th><th>Lider</th><th>Facultad</th><th>Sede</th><th>Proyectos liderados</th><th>Proyectos con participacion</th><th>Investigadores</th><th>Grupos aliados</th><th>Programas</th></tr>
+            </thead>
+            <tbody>
+              @for (g of detalle; track g.id) {
+                <tr>
+                  <td><span class="badge">{{ g.display }}</span></td>
+                  <td>{{ g.leader }}</td>
+                  <td>{{ g.faculty }}</td>
+                  <td>{{ g.regional }}</td>
+                  <td>{{ g.led }}</td>
+                  <td>{{ g.projects }}</td>
+                  <td>{{ g.researchers }}</td>
+                  <td>{{ g.partners }}</td>
+                  <td>{{ g.programs }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  }
+}

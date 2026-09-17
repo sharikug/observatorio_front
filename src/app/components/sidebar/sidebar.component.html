@@ -6,6 +6,9 @@
       <li><a routerLink="/investigacion" routerLinkActive="active"><i class="fas fa-chart-bar"></i> Investigacion en Cifras</a></li>
       <li><a routerLink="/impacto" routerLinkActive="active"><i class="fas fa-globe-americas"></i> Impacto</a></li>
       <li><a routerLink="/reportes" routerLinkActive="active"><i class="fas fa-file-alt"></i> Reportes</a></li>
+      @if (isAdmin) {
+        <li><a routerLink="/admin/importar" routerLinkActive="active"><i class="fas fa-file-import"></i> Importar datos</a></li>
+      }
       <li><a routerLink="/login" routerLinkActive="active"><i class="fas fa-robot"></i> Asistente IA</a></li>
     </ul>
   </div>
