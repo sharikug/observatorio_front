@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -8,12 +8,14 @@ import { GridComponent, LegendComponent, TooltipComponent, VisualMapComponent } 
 import { CanvasRenderer } from 'echarts/renderers';
 import type { EChartsCoreOption } from 'echarts/core';
 import { ObservatorioService } from '../../services/observatorio.service';
-import { ProyectoRow } from '../../models/observatorio.models';
+import { DashboardReportable, ProyectoRow, ReporteDocumento, ReporteGrafico } from '../../models/observatorio.models';
 import {
   PALETA,
   opcionesBarra,
+  opcionesBubbleGrid,
   opcionesDona,
   opcionesHeatmap,
+  opcionesLollipop,
   opcionesTreemap
 } from '../../services/charts.util';
 
@@ -51,11 +53,13 @@ const STOP = new Set([
   templateUrl: './dashboard-proyectos.component.html',
   styleUrl: './dashboard-proyectos.component.scss'
 })
-export class DashboardProyectosComponent implements OnInit, OnDestroy {
+export class DashboardProyectosComponent implements OnInit, OnDestroy, DashboardReportable {
+  @Input() embebido = false;
   datos: ProyectoRow[] = [];
   filtrados: ProyectoRow[] = [];
   kpis: Kpi[] = [];
   nube: SafeHtml = '';
+  nubeSvg = '';
   cargando = true;
   error = '';
   sinDatos = false;
@@ -157,11 +161,11 @@ export class DashboardProyectosComponent implements OnInit, OnDestroy {
         value: convConocido.length ? this.pct((100 * conConvenio) / convConocido.length) : 'N/D',
         sub: convConocido.length ? `${conConvenio} de ${convConocido.length} con dato disponible` : 'Sin informacion'
       },
-      { label: 'Equipo promedio', value: equipos.length ? this.fmt(promedio, 1) : 'N/D', sub: 'Investigadores por proyecto' },
+      { label: 'Equipo promedio', value: equipos.length ? this.fmt(promedio, 1) : 'N/D', sub: 'Investigador principal + coinvestigadores registrados' },
       {
         label: 'Alineacion institucional',
         value: arr.length ? this.pct((100 * alineados) / arr.length) : 'N/D',
-        sub: 'Proyectos asociados a por lo menos 1 linea'
+        sub: 'Proyectos asociados a por lo menos 1 linea institucional'
       }
     ];
   }
@@ -197,13 +201,22 @@ export class DashboardProyectosComponent implements OnInit, OnDestroy {
   }
 
   private dibujarOrientacion(arr: ProyectoRow[]): void {
+    const etiquetas: Record<string, string> = {
+      'INVESTIGACION APLICADA': 'Investigacion aplicada',
+      'INVESTIGACION BASICA': 'Investigacion basica',
+      'DESARROLLO EXPERIMENTAL': 'Desarrollo experimental',
+      'SIN INFORMACION': 'Sin informacion'
+    };
     const conteo = new Map<string, number>();
     arr.forEach((d) => {
-      const tipo = d.researchType && this.norm(d.researchType) !== 'SIN INFORMACION' ? d.researchType : 'Sin informacion';
+      const t = this.norm(d.researchType);
+      const tipo = etiquetas[t] ? t : 'SIN INFORMACION';
       conteo.set(tipo, (conteo.get(tipo) ?? 0) + 1);
     });
-    const datos = [...conteo.entries()].map(([name, value]) => ({ name, value }));
-    this.render('chart-orientacion', opcionesDona(datos));
+    const datos = Object.keys(etiquetas)
+      .map((t) => ({ name: etiquetas[t], value: conteo.get(t) ?? 0 }))
+      .filter((d) => d.value > 0);
+    this.render('chart-orientacion', opcionesDona(datos, ['#02482A', '#789C8B', '#D6AD0C', '#DDE5E1']));
   }
 
   private dibujarHeatmap(arr: ProyectoRow[]): void {
@@ -232,16 +245,17 @@ export class DashboardProyectosComponent implements OnInit, OnDestroy {
   private dibujarOds(arr: ProyectoRow[]): void {
     const conteo = new Map<number, number>();
     arr.forEach((d) => d.ods.forEach((n) => conteo.set(n, (conteo.get(n) ?? 0) + 1)));
-    const entradas = [...conteo.entries()].sort((a, b) => b[1] - a[1]);
-    const categorias = entradas.map(([n]) => `ODS ${n}`);
-    const valores = entradas.map(([, v]) => v);
-    this.render('chart-ods', opcionesBarra(categorias, [{ name: 'Proyectos', data: valores }], true));
+    const items = [...conteo.entries()]
+      .filter(([, v]) => v > 0)
+      .sort((a, b) => b[1] - a[1])
+      .map(([n, v]) => ({ label: `ODS ${n}`, texto: `ODS ${n}`, value: v }));
+    this.render('chart-ods', opcionesBubbleGrid(items));
   }
 
   private dibujarEquipos(arr: ProyectoRow[]): void {
     const tamanos = [...new Set(arr.map((d) => d.teamSize).filter((t): t is number => t != null))].sort((a, b) => a - b);
     const valores = tamanos.map((t) => arr.filter((d) => d.teamSize === t).length);
-    this.render('chart-equipos', opcionesBarra(tamanos.map(String), [{ name: 'Proyectos', data: valores }]));
+    this.render('chart-equipos', opcionesLollipop(tamanos.map(String), valores));
   }
 
   private dibujarConvocatorias(arr: ProyectoRow[]): void {
@@ -250,8 +264,8 @@ export class DashboardProyectosComponent implements OnInit, OnDestroy {
       const conv = d.conv ?? 'Sin informacion';
       conteo.set(conv, (conteo.get(conv) ?? 0) + 1);
     });
-    const entradas = [...conteo.entries()].sort((a, b) => b[1] - a[1]);
-    this.render('chart-convocatorias', opcionesBarra(entradas.map((e) => e[0]), [{ name: 'Proyectos', data: entradas.map((e) => e[1]) }], true));
+    const entradas = [...conteo.entries()].sort((a, b) => a[1] - b[1]);
+    this.render('chart-convocatorias', opcionesLollipop(entradas.map((e) => e[0]), entradas.map((e) => e[1]), true));
   }
 
   private dibujarNube(arr: ProyectoRow[]): void {
@@ -259,6 +273,7 @@ export class DashboardProyectosComponent implements OnInit, OnDestroy {
     arr.forEach((d) => this.tokenizar(d.objective).forEach((w) => conteo.set(w, (conteo.get(w) ?? 0) + 1)));
     const palabras = [...conteo.entries()].sort((a, b) => b[1] - a[1]).slice(0, 48);
     if (!palabras.length) {
+      this.nubeSvg = '';
       this.nube = this.sanitizer.bypassSecurityTrustHtml('<div class="nube-vacia">No hay objetivos generales para este filtro.</div>');
       return;
     }
@@ -297,13 +312,109 @@ export class DashboardProyectosComponent implements OnInit, OnDestroy {
       }
     });
     svg += '</svg>';
+    this.nubeSvg = svg;
     this.nube = this.sanitizer.bypassSecurityTrustHtml(svg);
+  }
+
+  async reportePayload(): Promise<ReporteDocumento> {
+    const graficos = this.graficos();
+    if (this.nubeSvg) {
+      const imagen = await this.rasterizarSvg(this.nubeSvg);
+      if (imagen) {
+        graficos.splice(4, 0, { titulo: 'Tematicas emergentes desde los objetivos generales', imagen });
+      }
+    }
+    return {
+      tablero: 'Proyectos de investigacion',
+      filtrosAplicados: this.filtrosLegibles(),
+      indicadores: this.kpis.map((k) => ({ etiqueta: k.label, valor: k.value })),
+      columnas: ['Anio', 'Convocatoria', 'Codigo', 'Proyecto', 'Investigador principal', 'Facultad', 'Regional', 'Tipo', 'Equipo', 'ODS'],
+      filas: this.detalle.map((d) => [
+        d.year == null ? '' : String(d.year),
+        d.conv ?? '',
+        d.code,
+        d.project,
+        d.pi ?? '',
+        d.faculty ?? '',
+        d.regional ?? '',
+        d.researchType ?? '',
+        d.teamSize == null ? '' : String(d.teamSize),
+        d.ods.length ? 'ODS ' + d.ods.join(', ') : ''
+      ]),
+      graficos,
+      fuente: 'Observatorio de Investigacion - Sistema de informacion institucional'
+    };
+  }
+
+  private graficos(): ReporteGrafico[] {
+    const titulos: Record<string, string> = {
+      'chart-evolucion': 'Evolucion del portafolio por anio y periodo',
+      'chart-orientacion': 'Orientacion de la investigacion',
+      'chart-heatmap': 'Mapa institucional del portafolio',
+      'chart-lineas': 'Alineacion con lineas institucionales',
+      'chart-ods': 'ODS asociados al portafolio',
+      'chart-equipos': 'Estructura de los equipos de investigacion',
+      'chart-convocatorias': 'Proyectos por convocatoria'
+    };
+    const out: ReporteGrafico[] = [];
+    this.instancias.forEach((instancia, id) => {
+      if (titulos[id]) {
+        out.push({ titulo: titulos[id], imagen: this.imagen(instancia.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#ffffff' })) });
+      }
+    });
+    return out;
+  }
+
+  private filtrosLegibles(): string[] {
+    const etiquetas: [keyof Filtros, string][] = [
+      ['year', 'Anio'], ['conv', 'Convocatoria'], ['faculty', 'Facultad'],
+      ['regional', 'Unidad regional'], ['researchType', 'Tipo de investigacion'],
+      ['convenio', 'Convenio'], ['program', 'Programa']
+    ];
+    const out = etiquetas.filter(([k]) => this.filtros[k] !== 'ALL').map(([k, label]) => `${label}: ${this.filtros[k]}`);
+    return out.length ? out : ['Sin filtros: todos los registros disponibles'];
+  }
+
+  private imagen(dataUrl: string): string {
+    return dataUrl.split(',')[1] ?? '';
+  }
+
+  private rasterizarSvg(svg: string): Promise<string> {
+    return new Promise((resolve) => {
+      const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1440;
+        canvas.height = 820;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(this.imagen(canvas.toDataURL('image/png')));
+        } else {
+          resolve('');
+        }
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        resolve('');
+      };
+      img.src = url;
+    });
   }
 
   private render(id: string, opcion: EChartsCoreOption): void {
     const el = document.getElementById(id);
     if (!el) return;
     let instancia = this.instancias.get(id);
+    if (instancia && instancia.getDom() !== el) {
+      instancia.dispose();
+      instancia = undefined;
+    }
     if (!instancia) {
       instancia = echarts.init(el);
       this.instancias.set(id, instancia);

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as echarts from 'echarts/core';
@@ -7,7 +7,7 @@ import { GridComponent, LegendComponent, TooltipComponent, VisualMapComponent } 
 import { CanvasRenderer } from 'echarts/renderers';
 import type { EChartsCoreOption } from 'echarts/core';
 import { ObservatorioService } from '../../services/observatorio.service';
-import { GrupoInfo, GrupoProyecto, GruposDashboard } from '../../models/observatorio.models';
+import { DashboardReportable, GrupoInfo, GrupoProyecto, GruposDashboard, ReporteDocumento, ReporteGrafico } from '../../models/observatorio.models';
 import {
   PuntoBurbuja,
   opcionesBurbuja,
@@ -60,7 +60,8 @@ interface StatsGrupo {
   templateUrl: './dashboard-grupos.component.html',
   styleUrl: './dashboard-grupos.component.scss'
 })
-export class DashboardGruposComponent implements OnInit, OnDestroy {
+export class DashboardGruposComponent implements OnInit, OnDestroy, DashboardReportable {
+  @Input() embebido = false;
   kpis: Kpi[] = [];
   detalle: FilaGrupo[] = [];
   cargando = true;
@@ -248,20 +249,25 @@ export class DashboardGruposComponent implements OnInit, OnDestroy {
         if (n > max) max = n;
       });
     });
-    this.render('chart-heatmap-grupos', opcionesHeatmap(anios.map(String), rankeados.map((g) => this.display(g)), datos, max));
+    this.render('chart-heatmap-grupos', opcionesHeatmap(anios.map(String), rankeados.map((g) => this.corto(this.display(g), 30)), datos, max));
 
     const facultades = this.unicos(grupos.map((g) => this.meta.get(g)?.faculty));
     const sunburst = facultades.map((f) => ({
-      name: f,
+      name: this.corto(f, 24),
       children: grupos
         .filter((g) => (this.meta.get(g)?.faculty ?? 'Sin informacion') === f)
-        .map((g) => ({ name: this.display(g), value: stats.get(g)?.projects.size ?? 0 }))
+        .map((g) => ({ name: this.corto(this.display(g), 22), value: stats.get(g)?.projects.size ?? 0 }))
     }));
     this.render('chart-sunburst', opcionesSunburst(sunburst));
 
+    const nombres = new Map<string, string>();
+    const cortoId = (id: string): string => {
+      if (!nombres.has(id)) nombres.set(id, this.corto(this.display(id), 24));
+      return nombres.get(id)!;
+    };
     const top = [...pares.values()].sort((a, b) => b.value - a.value).slice(0, 22);
-    const nodos = [...new Set(top.flatMap((e) => [e.a, e.b]))].map((id) => ({ name: this.display(id) }));
-    const links = top.map((e) => ({ source: this.display(e.a), target: this.display(e.b), value: e.value }));
+    const nodos = [...new Set(top.flatMap((e) => [e.a, e.b]))].map((id) => ({ name: cortoId(id) }));
+    const links = top.map((e) => ({ source: cortoId(e.a), target: cortoId(e.b), value: e.value }));
     this.render('chart-sankey', opcionesSankey(nodos, links));
 
     const aliados = new Map<string, number>();
@@ -273,11 +279,11 @@ export class DashboardGruposComponent implements OnInit, OnDestroy {
       .map((g) => {
         const s = stats.get(g)!;
         return {
-          name: this.display(g),
+          name: this.corto(this.display(g), 26),
           x: s.led.size,
           y: aliados.get(g) ?? 0,
           size: 18 + Math.sqrt(s.projects.size) * 6,
-          group: this.meta.get(g)?.faculty ?? 'Sin informacion'
+          group: this.corto(this.meta.get(g)?.faculty ?? 'Sin informacion', 20)
         };
       })
       .filter((p) => p.x > 0 || p.y > 0);
@@ -300,7 +306,9 @@ export class DashboardGruposComponent implements OnInit, OnDestroy {
       territorial.set(reg, (territorial.get(reg) ?? 0) + 1);
     });
     this.render('chart-territorial', opcionesDona(
-      [...territorial.entries()].map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value)
+      [...territorial.entries()]
+        .map(([name, value]) => ({ name: this.corto(name, 24), value }))
+        .sort((a, b) => b.value - a.value)
     ));
   }
 
@@ -316,6 +324,10 @@ export class DashboardGruposComponent implements OnInit, OnDestroy {
     const el = document.getElementById(id);
     if (!el) return;
     let instancia = this.instancias.get(id);
+    if (instancia && instancia.getDom() !== el) {
+      instancia.dispose();
+      instancia = undefined;
+    }
     if (!instancia) {
       instancia = echarts.init(el);
       this.instancias.set(id, instancia);
@@ -325,6 +337,11 @@ export class DashboardGruposComponent implements OnInit, OnDestroy {
 
   display(id: string): string {
     return this.meta.get(id)?.display ?? id;
+  }
+
+  private corto(valor: string, max = 26): string {
+    const s = valor ?? '';
+    return s.length > max ? s.slice(0, max - 1).trimEnd() + '…' : s;
   }
 
   private unicos(valores: (string | null | undefined)[]): string[] {
@@ -341,5 +358,56 @@ export class DashboardGruposComponent implements OnInit, OnDestroy {
 
   private pct(n: number): string {
     return isFinite(n) ? `${Number(n).toLocaleString('es-CO', { maximumFractionDigits: 1 })}%` : 'N/D';
+  }
+
+  async reportePayload(): Promise<ReporteDocumento> {
+    return {
+      tablero: 'Grupos de investigacion',
+      filtrosAplicados: this.filtrosLegibles(),
+      indicadores: this.kpis.map((k) => ({ etiqueta: k.label, valor: k.value })),
+      columnas: ['Grupo', 'Lider', 'Facultad', 'Sede', 'Proyectos liderados', 'Proyectos con participacion', 'Investigadores', 'Grupos aliados', 'Programas'],
+      filas: this.detalle.map((g) => [
+        g.display,
+        g.leader,
+        g.faculty,
+        g.regional,
+        String(g.led),
+        String(g.projects),
+        String(g.researchers),
+        String(g.partners),
+        g.programs
+      ]),
+      graficos: this.graficos(),
+      fuente: 'Observatorio de Investigacion - Sistema de informacion institucional'
+    };
+  }
+
+  private graficos(): ReporteGrafico[] {
+    const titulos: Record<string, string> = {
+      'chart-heatmap-grupos': 'Actividad de los grupos en el tiempo',
+      'chart-sunburst': 'Estructura institucional',
+      'chart-sankey': 'Red de colaboracion',
+      'chart-bubble': 'Liderazgo y aliados',
+      'chart-roles': 'Roles',
+      'chart-territorial': 'Distribucion territorial'
+    };
+    const out: ReporteGrafico[] = [];
+    this.instancias.forEach((instancia, id) => {
+      if (titulos[id]) {
+        out.push({ titulo: titulos[id], imagen: instancia.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#ffffff' }).split(',')[1] ?? '' });
+      }
+    });
+    return out;
+  }
+
+  private filtrosLegibles(): string[] {
+    const etiquetas: [keyof Filtros, string][] = [
+      ['year', 'Anio'], ['conv', 'Convocatoria'], ['faculty', 'Facultad'],
+      ['regional', 'Sede'], ['program', 'Programa'], ['group', 'Grupo']
+    ];
+    const out = etiquetas
+      .filter(([k]) => this.filtros[k] !== 'ALL')
+      .map(([k, label]) => `${label}: ${k === 'group' ? this.display(this.filtros[k]) : this.filtros[k]}`);
+    return out.length ? out : ['Sin filtros: todos los registros disponibles'];
   }
 }

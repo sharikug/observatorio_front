@@ -36,7 +36,7 @@
 .tabla-container { max-width: 1300px; margin: 0 auto; }
 .tabla-container h2 { font-family: var(--font-title); color: var(--green-dark); font-size: 24px; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
 .conteo { background: var(--green-light); color: var(--green-dark); border-radius: 999px; padding: 2px 12px; font-size: 14px; }
-.tabla-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+.tabla-scroll { overflow: auto; max-height: 420px; border: 1px solid var(--border); border-radius: 10px; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 thead th { background: var(--green-dark); color: #fff; text-align: left; padding: 10px 12px; position: sticky; top: 0; white-space: nowrap; }
 tbody td { padding: 9px 12px; border-bottom: 1px solid var(--bg-light); vertical-align: top; }

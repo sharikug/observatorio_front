@@ -3,82 +3,88 @@
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1>Generador de reportes</h1>
-    <p>Obten un reporte personalizado de la informacion que requieras.</p>
+    <p>Elige un tablero y obten su informe institucional en PDF.</p>
   </div>
 </section>
 
 <section class="report-intro">
   <div class="report-intro-container">
-    <p>Selecciona los filtros de busqueda para obtener informacion personalizada.</p>
-    <p class="warning">recuerda registrarte para poder generar documentos</p>
+    <p>Selecciona el tablero y ajusta sus filtros; el informe incluira las mismas graficas, indicadores y datos que ves en pantalla.</p>
+    @if (!isLoggedIn()) {
+      <p class="warning">Puedes explorar los tableros y sus filtros. Para generar y descargar el PDF debes iniciar sesion.</p>
+    }
   </div>
 </section>
 
 <section class="report-section">
   <div class="report-container">
-    <div class="report-form-area">
-      <form (ngSubmit)="generateReport()" class="report-form">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Periodo de la busqueda</label>
-            <input type="text" [(ngModel)]="filters.periodo" name="periodo" placeholder="Todos">
-          </div>
-          <div class="form-group">
-            <label>Tipo de informacion</label>
-            <select [(ngModel)]="filters.tipo" name="tipo">
-              <option>Todos</option>
-              <option>Produccion cientifica</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Programa Academico</label>
-            <input type="text" [(ngModel)]="filters.programa" name="programa" placeholder="Todos">
-          </div>
-          <div class="form-group">
-            <label>Grupo de Investigacion</label>
-            <input type="text" [(ngModel)]="filters.grupo" name="grupo" placeholder="Todos">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Facultad</label>
-            <select [(ngModel)]="filters.facultad" name="facultad">
-              <option>Todas</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Estado del Proyecto</label>
-            <select [(ngModel)]="filters.estado" name="estado">
-              <option>Todos</option>
-              <option>Activo</option>
-              <option>Finalizado</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Fecha Inicial</label>
-            <input type="date" [(ngModel)]="filters.fechaIni" name="fechaIni">
-          </div>
-          <div class="form-group">
-            <label>Fecha Final</label>
-            <input type="date" [(ngModel)]="filters.fechaFin" name="fechaFin">
-          </div>
-        </div>
-        <button type="submit" class="btn-generate">Generar</button>
-      </form>
+    <div class="report-selector">
+      <button type="button" class="selector-card" [class.active]="seleccion === 'proyectos'" (click)="seleccionar('proyectos')">
+        <i class="fas fa-project-diagram"></i>
+        <span>Tablero de Proyectos</span>
+        <small>Evolucion, orientacion y distribucion del portafolio</small>
+      </button>
+      <button type="button" class="selector-card" [class.active]="seleccion === 'grupos'" (click)="seleccionar('grupos')">
+        <i class="fas fa-users"></i>
+        <span>Tablero de Grupos</span>
+        <small>Participacion, liderazgo y colaboracion de los grupos</small>
+      </button>
     </div>
-    <div class="report-preview">
-      <h3>Vista previa</h3>
-      <div class="preview-placeholder">
-        <div class="preview-doc">
-          <div class="doc-icon"><i class="fas fa-file-alt"></i></div>
-          <span>Documento de investigacion</span>
+
+    @if (!seleccion) {
+      <p class="report-hint">Selecciona un tablero para ver sus filtros, indicadores y graficas.</p>
+    }
+
+    <div class="report-embed">
+      @if (seleccion === 'proyectos') {
+        <app-dashboard-proyectos #tablero [embebido]="true"></app-dashboard-proyectos>
+      }
+      @if (seleccion === 'grupos') {
+        <app-dashboard-grupos #tablero [embebido]="true"></app-dashboard-grupos>
+      }
+    </div>
+
+    <div class="report-actions">
+      @if (avisoLogin) {
+        <div class="login-alert">
+          <p><i class="fas fa-lock"></i> Para generar y descargar el informe debes iniciar sesion o registrarte.</p>
+          <div class="login-alert-actions">
+            <a routerLink="/login" class="btn-login">Iniciar sesion</a>
+            <a routerLink="/registro" class="btn-register">Registrarme</a>
+          </div>
         </div>
-      </div>
+      }
+      @if (error) {
+        <p class="report-error">{{ error }}</p>
+      }
+      <button type="button" class="btn-generate" [disabled]="generando || !seleccion || tableroRef?.cargando" (click)="generateReport()">
+        <i class="fas fa-file-pdf"></i>
+        {{ generando ? 'Generando...' : 'Generar reporte PDF' }}
+      </button>
+    </div>
+
+    <div class="report-history">
       <h4>Historico de archivos generados</h4>
+      @if (!isLoggedIn()) {
+        <p class="historial-vacio">Inicia sesion para consultar y volver a descargar tus reportes.</p>
+      } @else if (historial.length) {
+        <ul class="historial-lista">
+          @for (item of historial; track item.id) {
+            <li class="historial-item">
+              <div class="historial-info">
+                <strong>{{ item.titulo }}</strong>
+                <span>{{ item.fecha }} &middot; {{ item.tipo }}</span>
+                <small>{{ item.filtros }}</small>
+              </div>
+              <button type="button" class="btn-download" (click)="descargar(item)">
+                <i class="fas fa-download"></i> Descargar
+              </button>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="historial-vacio">Aun no has generado reportes.</p>
+      }
     </div>
   </div>
 </section>

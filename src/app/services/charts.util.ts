@@ -33,9 +33,9 @@ export function opcionesBarra(categorias: string[], series: SerieSimple[], horiz
   };
 }
 
-export function opcionesDona(datos: { name: string; value: number }[]): EChartsCoreOption {
+export function opcionesDona(datos: { name: string; value: number }[], colores?: string[]): EChartsCoreOption {
   return {
-    color: PALETA,
+    color: colores ?? PALETA,
     tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
     legend: { bottom: 0, textStyle: ETIQUETA },
     series: [
@@ -104,7 +104,7 @@ export function opcionesSunburst(datos: unknown[]): EChartsCoreOption {
         type: 'sunburst',
         radius: ['15%', '90%'],
         data: datos,
-        label: { fontSize: 11, minAngle: 8 },
+        label: { fontSize: 10, minAngle: 16, overflow: 'truncate', width: 62 },
         itemStyle: { borderColor: '#fff', borderWidth: 1 }
       }
     ]
@@ -122,12 +122,12 @@ export function opcionesSankey(nodes: { name: string }[], links: { source: strin
         right: 8,
         top: 16,
         bottom: 16,
-        nodeWidth: 16,
-        nodeGap: 12,
+        nodeWidth: 14,
+        nodeGap: 14,
         data: nodes,
         links,
-        lineStyle: { color: 'gradient', opacity: 0.35 },
-        label: { fontSize: 11 }
+        lineStyle: { color: 'gradient', opacity: 0.3 },
+        label: { fontSize: 10 }
       }
     ]
   };
@@ -164,5 +164,82 @@ export function opcionesBurbuja(puntos: PuntoBurbuja[], ejeX: string, ejeY: stri
       })),
       itemStyle: { opacity: 0.82, borderColor: '#fff', borderWidth: 1.5 }
     }))
+  };
+}
+
+export interface BurbujaGridItem {
+  label: string;
+  texto: string;
+  value: number;
+}
+
+export function opcionesBubbleGrid(items: BurbujaGridItem[], columnas = 4): EChartsCoreOption {
+  const colores = ['#D6AD0C', '#02482A', '#2C624E', '#789C8B', '#B9CEC4', '#5E8A75'];
+  const filas = Math.max(1, Math.ceil(items.length / columnas));
+  return {
+    tooltip: {
+      trigger: 'item',
+      formatter: (p: { data: { texto: string; value2: number } }) =>
+        `<b>${p.data.texto}</b><br>${p.data.value2} proyectos`
+    },
+    grid: { left: 8, right: 8, top: 8, bottom: 8 },
+    xAxis: { type: 'value', show: false, min: 0.3, max: columnas + 0.7 },
+    yAxis: { type: 'value', show: false, min: -(filas + 0.7), max: -0.3 },
+    series: [
+      {
+        type: 'scatter',
+        data: items.map((it, i) => ({
+          value: [(i % columnas) + 1, -(Math.floor(i / columnas) + 1)],
+          symbolSize: 26 + it.value * 2.2,
+          texto: it.texto,
+          value2: it.value,
+          itemStyle: {
+            color: colores[Math.min(i, colores.length - 1)],
+            borderColor: '#fff',
+            borderWidth: 2
+          },
+          label: { show: true, formatter: it.label, color: '#fff', fontSize: 11, fontWeight: 600, position: 'inside' }
+        }))
+      }
+    ]
+  };
+}
+
+export function opcionesLollipop(categorias: string[], valores: number[], horizontal = false): EChartsCoreOption {
+  const ejeCategorias = {
+    type: 'category' as const,
+    data: categorias,
+    axisLabel: ETIQUETA,
+    axisTick: { show: false },
+    axisLine: { lineStyle: { color: '#cbd8d1' } }
+  };
+  const ejeValor = {
+    type: 'value' as const,
+    axisLabel: ETIQUETA,
+    splitLine: { lineStyle: { color: '#eef2ef' } },
+    min: 0
+  };
+  return {
+    tooltip: { trigger: 'item', formatter: '{c} proyectos' },
+    grid: { left: 12, right: 26, top: 26, bottom: 12, containLabel: true },
+    xAxis: horizontal ? ejeValor : ejeCategorias,
+    yAxis: horizontal ? { ...ejeCategorias, inverse: true } : ejeValor,
+    series: [
+      {
+        type: 'bar',
+        data: valores,
+        barWidth: 3,
+        itemStyle: { color: '#B9CEC4' },
+        silent: true,
+        tooltip: { show: false }
+      },
+      {
+        type: 'scatter',
+        data: valores,
+        symbolSize: 14,
+        itemStyle: { color: '#02482A', borderColor: '#fff', borderWidth: 2 },
+        label: { show: true, position: horizontal ? 'right' : 'top', formatter: '{c}', fontSize: 10, color: '#334155' }
+      }
+    ]
   };
 }

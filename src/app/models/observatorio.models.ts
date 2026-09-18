@@ -72,3 +72,37 @@ export interface ImportarResumen {
   omitidos: number;
   errores: ImportarError[];
 }
+
+export interface ReporteIndicador {
+  etiqueta: string;
+  valor: string;
+}
+
+export interface ReporteGrafico {
+  titulo: string;
+  imagen: string;
+}
+
+export interface ReporteDocumento {
+  tablero: string;
+  filtrosAplicados: string[];
+  indicadores: ReporteIndicador[];
+  columnas: string[];
+  filas: string[][];
+  graficos: ReporteGrafico[];
+  fuente: string;
+}
+
+export interface ReporteHistorialItem {
+  id: string;
+  titulo: string;
+  tipo: string;
+  filtros: string;
+  fecha: string;
+  nombreArchivo: string;
+}
+
+export interface DashboardReportable {
+  cargando: boolean;
+  reportePayload(): Promise<ReporteDocumento>;
+}

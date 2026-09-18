@@ -26,22 +26,25 @@
 .kpi-sub { font-size: 11.5px; color: var(--text-muted); }
 
 .charts-section { background: var(--bg-light); padding: 3rem 4rem; }
-.charts-container { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.75rem; }
+.charts-container { max-width: 1300px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.75rem; }
 .chart-card { background: var(--bg-white); border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
 .chart-card.ancho-2 { grid-column: span 2; }
 .chart-header { background: var(--green-dark); color: #fff; padding: 0.85rem 1.25rem; display: flex; align-items: center; gap: 0.65rem; font-size: 14px; }
-.chart-body { padding: 0.75rem; flex: 1; }
-.chart { width: 100%; height: 320px; }
+.chart-desc { font-size: 12px; color: var(--text-muted); padding: 8px 14px 0; line-height: 1.4; }
+.chart-body { padding: 0.5rem 0.75rem 0.75rem; flex: 1; }
+.chart { width: 100%; height: 340px; }
+.chart.tall { height: 430px; }
 .nube-body { padding: 0; }
 .nube { width: 100%; height: 410px; }
 .nube svg { width: 100%; height: 100%; }
 .nube-vacia { padding: 3rem; text-align: center; color: var(--text-muted); }
+.section-title { max-width: 1300px; margin: 2.5rem auto 1rem; font-family: var(--font-title); font-size: 18px; font-weight: 700; color: var(--green-dark); border-left: 4px solid var(--gold); padding-left: 10px; }
 
 .tabla-section { background: var(--bg-white); padding: 3rem 4rem 4rem; }
 .tabla-container { max-width: 1300px; margin: 0 auto; }
 .tabla-container h2 { font-family: var(--font-title); color: var(--green-dark); font-size: 24px; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
 .conteo { background: var(--green-light); color: var(--green-dark); border-radius: 999px; padding: 2px 12px; font-size: 14px; }
-.tabla-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+.tabla-scroll { overflow: auto; max-height: 420px; border: 1px solid var(--border); border-radius: 10px; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 thead th { background: var(--green-dark); color: #fff; text-align: left; padding: 10px 12px; position: sticky; top: 0; white-space: nowrap; }
 tbody td { padding: 9px 12px; border-bottom: 1px solid var(--bg-light); vertical-align: top; }

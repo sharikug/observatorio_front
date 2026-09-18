@@ -1,11 +1,13 @@
-<section class="hero-banner">
-  <img src="assets/images/hero-investigacion.svg" alt="" class="hero-bg-image">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1><i class="fas fa-users"></i> Grupos de investigacion</h1>
-    <p>Participacion, liderazgo y colaboracion de los grupos en los proyectos</p>
-  </div>
-</section>
+@if (!embebido) {
+  <section class="hero-banner">
+    <img src="assets/images/hero-investigacion.svg" alt="" class="hero-bg-image">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1><i class="fas fa-users"></i> Grupos de investigacion</h1>
+      <p>Participacion, liderazgo y colaboracion de los grupos en los proyectos</p>
+    </div>
+  </section>
+}
 
 @if (cargando) {
   <section class="estado"><div class="estado-box"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div></section>

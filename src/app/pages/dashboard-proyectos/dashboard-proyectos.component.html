@@ -1,11 +1,13 @@
-<section class="hero-banner">
-  <img src="assets/images/hero-investigacion.svg" alt="" class="hero-bg-image">
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <h1><i class="fas fa-project-diagram"></i> Proyectos de investigacion</h1>
-    <p>Evolucion, orientacion y distribucion del portafolio de proyectos</p>
-  </div>
-</section>
+@if (!embebido) {
+  <section class="hero-banner">
+    <img src="assets/images/hero-investigacion.svg" alt="" class="hero-bg-image">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1><i class="fas fa-project-diagram"></i> Proyectos de investigacion</h1>
+      <p>Evolucion, orientacion y distribucion del portafolio de proyectos</p>
+    </div>
+  </section>
+}
 
 @if (cargando) {
   <section class="estado"><div class="estado-box"><i class="fas fa-spinner fa-spin"></i> Cargando datos...</div></section>
@@ -42,36 +44,49 @@
 
     <section class="charts-section">
       <div class="charts-container">
-        <div class="chart-card ancho-2">
-          <div class="chart-header"><i class="fas fa-chart-column"></i><span>Evolucion del portafolio</span></div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-chart-column"></i><span>Evolucion del portafolio por anio y periodo</span></div>
+          <p class="chart-desc">Numero de proyectos registrados en cada periodo academico.</p>
           <div class="chart-body"><div id="chart-evolucion" class="chart"></div></div>
         </div>
         <div class="chart-card">
           <div class="chart-header"><i class="fas fa-chart-pie"></i><span>Orientacion de la investigacion</span></div>
+          <p class="chart-desc">Peso relativo de investigacion aplicada, basica y desarrollo experimental.</p>
           <div class="chart-body"><div id="chart-orientacion" class="chart"></div></div>
         </div>
-        <div class="chart-card ancho-2">
-          <div class="chart-header"><i class="fas fa-table-cells"></i><span>Distribucion por facultad y unidad regional</span></div>
-          <div class="chart-body"><div id="chart-heatmap" class="chart"></div></div>
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-table-cells"></i><span>Mapa institucional del portafolio</span></div>
+          <p class="chart-desc">Cantidad de proyectos por Facultad x Unidad Regional.</p>
+          <div class="chart-body"><div id="chart-heatmap" class="chart tall"></div></div>
         </div>
         <div class="chart-card">
-          <div class="chart-header"><i class="fas fa-layer-group"></i><span>Lineas institucionales</span></div>
-          <div class="chart-body"><div id="chart-lineas" class="chart"></div></div>
+          <div class="chart-header"><i class="fas fa-layer-group"></i><span>Alineacion con lineas institucionales</span></div>
+          <p class="chart-desc">El tamano del bloque representa el numero de proyectos por linea.</p>
+          <div class="chart-body"><div id="chart-lineas" class="chart tall"></div></div>
         </div>
-        <div class="chart-card ancho-2">
-          <div class="chart-header"><i class="fas fa-quote-left"></i><span>Tematicas de los objetivos</span></div>
+      </div>
+
+      <div class="section-title">Orientacion tematica y contribucion a ODS</div>
+
+      <div class="charts-container">
+        <div class="chart-card">
+          <div class="chart-header"><i class="fas fa-quote-left"></i><span>Tematicas emergentes desde los objetivos generales</span></div>
+          <p class="chart-desc">Terminos mas frecuentes de los objetivos; cambia con los filtros.</p>
           <div class="chart-body nube-body"><div class="nube" [innerHTML]="nube"></div></div>
         </div>
         <div class="chart-card">
-          <div class="chart-header"><i class="fas fa-globe"></i><span>Objetivos de desarrollo sostenible</span></div>
-          <div class="chart-body"><div id="chart-ods" class="chart"></div></div>
+          <div class="chart-header"><i class="fas fa-globe"></i><span>ODS asociados al portafolio</span></div>
+          <p class="chart-desc">El tamano de la burbuja representa cuantos proyectos se vinculan a cada ODS.</p>
+          <div class="chart-body"><div id="chart-ods" class="chart tall"></div></div>
         </div>
         <div class="chart-card">
-          <div class="chart-header"><i class="fas fa-users"></i><span>Estructura de equipos</span></div>
+          <div class="chart-header"><i class="fas fa-users"></i><span>Estructura de los equipos de investigacion</span></div>
+          <p class="chart-desc">Frecuencia de cada tamano de equipo de investigacion.</p>
           <div class="chart-body"><div id="chart-equipos" class="chart"></div></div>
         </div>
-        <div class="chart-card ancho-2">
+        <div class="chart-card">
           <div class="chart-header"><i class="fas fa-calendar-check"></i><span>Proyectos por convocatoria</span></div>
+          <p class="chart-desc">Comparativo de convocatorias con proyectos visibles.</p>
           <div class="chart-body"><div id="chart-convocatorias" class="chart"></div></div>
         </div>
       </div>
