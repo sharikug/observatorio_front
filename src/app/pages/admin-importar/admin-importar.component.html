@@ -8,25 +8,153 @@
 
 <section class="importar">
   <div class="importar-container">
+
+    @if (activo) {
+      <div class="panel activo-panel">
+        <h2><i class="fas fa-circle-check"></i> Archivo activo</h2>
+        <p class="ayuda">Este es el unico Excel que usan los tableros y el asistente de IA. Los demas
+          archivos quedan en el historial y no se mezclan con estos datos.</p>
+        <div class="activo-cuerpo">
+          <i class="fas fa-file-excel fa-3xl"></i>
+          <div>
+            <strong>{{ activo.nombre }}</strong>
+            <span>Fecha de carga: {{ activo.fechaCarga }}</span>
+            <span>Estado: {{ activo.estado }}</span>
+            <span>Usuario: {{ activo.usuario }} &middot; {{ tamano(activo.tamano) }}</span>
+            <span class="estado-ok">Validado: sin inconsistencias</span>
+          </div>
+          <button type="button" class="btn-secundario" (click)="descargar(activo)">
+            <i class="fas fa-download"></i> Descargar
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="panel">
+        <div class="alerta warning"><i class="fas fa-exclamation-triangle"></i> No hay ningun Excel activo.
+          Los tableros y el asistente funcionan sin fuente de datos hasta que un administrador active un archivo.</div>
+      </div>
+    }
+
+    @if (historial && historial.historial.length) {
+      <div class="panel">
+        <h2>Historial ({{ historial.historial.length }})</h2>
+        <p class="ayuda">Archivos validados en el pasado. Se conservan para consulta, no alimentan los tableros ni la IA.</p>
+        <div class="tabla-scroll">
+          <table>
+            <thead><tr><th>Archivo</th><th>Fecha de carga</th><th>Dejo de ser activo</th><th>Usuario</th><th>Validacion</th><th></th></tr></thead>
+            <tbody>
+              @for (e of historial.historial; track e.id) {
+                <tr>
+                  <td><i class="fas fa-file-excel"></i> {{ e.nombre }}</td>
+                  <td>{{ e.fechaCarga }}</td>
+                  <td>{{ e.fechaHistorico || '—' }}</td>
+                  <td>{{ e.usuario }}</td>
+                  <td>{{ e.totalInconsistencias === 0 ? 'Sin inconsistencias' : e.totalInconsistencias + ' inconsistencia(s)' }}</td>
+                  <td><button type="button" class="btn-enlace" (click)="descargar(e)"><i class="fas fa-download"></i></button></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
     <div class="panel">
-      <h2>Archivo Excel</h2>
-      <p class="ayuda">El archivo debe conservar la estructura del modelo de datos (hojas: Proyectos, Grupos, Participacion, Proyecto_Grupo, Financiacion, etc.). La importacion es idempotente: no duplica registros.</p>
+      <h2>Cargar un nuevo Excel</h2>
+      <p class="ayuda">El archivo debe conservar la estructura del modelo de datos (hojas: Proyectos, Grupos, Participacion, Proyecto_Grupo, etc.). Al activarlo pasa a ser el unico Excel vigente y el anterior queda en el historial. La importacion es idempotente: no duplica registros.</p>
       <label class="file-input">
         <input type="file" accept=".xlsx" (change)="seleccionar($event)">
         <span class="file-btn"><i class="fas fa-folder-open"></i> Seleccionar archivo</span>
         <span class="file-name">{{ archivo ? archivo.name : 'Ningun archivo seleccionado' }}</span>
       </label>
-      <button type="button" class="btn-importar" [disabled]="!archivo || cargando" (click)="importar()">
-        @if (cargando) { <i class="fas fa-spinner fa-spin"></i> Importando... } @else { <i class="fas fa-upload"></i> Importar }
+      <button type="button" class="btn-importar" [disabled]="!archivo || cargando" (click)="validar()">
+        @if (paso === 'validando') { <i class="fas fa-spinner fa-spin"></i> Validando... }
+        @else { <i class="fas fa-magnifying-glass"></i> Validar archivo }
       </button>
       @if (error) {
         <div class="alerta error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div>
       }
     </div>
 
+    @if (validacion && validacion.valido && !resumen) {
+      <div class="panel">
+        <h2>Validacion completada</h2>
+        <div class="alerta ok"><i class="fas fa-circle-check"></i> Archivo validado correctamente. No presenta inconsistencias y puede continuar con el procesamiento.</div>
+        <p class="ayuda">Se revisaron {{ hojasRevisadas }} hojas.</p>
+        <button type="button" class="btn-importar" [disabled]="cargando" (click)="activar()">
+          @if (cargando) { <i class="fas fa-spinner fa-spin"></i> Activando... }
+          @else { <i class="fas fa-upload"></i> Activar como Excel activo }
+        </button>
+      </div>
+    }
+
+    @if (validacion && !validacion.valido) {
+      <div class="panel">
+        <h2>Se encontraron {{ validacion.totalInconsistencias }} inconsistencias en el archivo {{ validacion.archivo }}</h2>
+
+        @if (!validacion.puedeContinuar) {
+          <div class="alerta error"><i class="fas fa-ban"></i> El archivo no puede procesarse debido a {{ validacion.criticas }} errores criticos.{{ activo ? ' El Excel activo actual no fue modificado.' : '' }}</div>
+        } @else {
+          <div class="alerta warning"><i class="fas fa-exclamation-triangle"></i> El archivo se puede procesar, pero algunos datos podrian no guardarse correctamente. Revise la lista antes de continuar.</div>
+        }
+
+        @if (hojasConProblemas.length) {
+          <h3>Inconsistencias por hoja ({{ hojasRevisadas }} hojas revisadas)</h3>
+          <div class="chips">
+            @for (h of hojasConProblemas; track h.nombre) {
+              <span class="chip" [class.critico]="h.criticas > 0">
+                {{ h.nombre }}: {{ h.inconsistencias }}
+                @if (h.criticas > 0) { <strong> ({{ h.criticas }} criticas)</strong> }
+              </span>
+            }
+          </div>
+        }
+
+        <h3>Detalle ({{ validacion.totalInconsistencias }})</h3>
+        <div class="tabla-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Hoja</th>
+                <th>Celda</th>
+                <th>Fila</th>
+                <th>Columna</th>
+                <th>Problema</th>
+                <th>Sugerencia</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (i of validacion.inconsistencias; track $index) {
+                <tr [class.fila-critica]="critico(i.tipo)">
+                  <td>{{ i.hoja || '—' }}</td>
+                  <td>{{ i.celda || '—' }}</td>
+                  <td>{{ i.fila || '—' }}</td>
+                  <td>{{ i.nombreColumna || '—' }}</td>
+                  <td>{{ i.mensaje }}</td>
+                  <td>{{ i.sugerencia }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="acciones">
+          <button type="button" class="btn-secundario" [disabled]="cargando" (click)="cancelar()">
+            <i class="fas fa-arrow-left"></i> Volver y corregir
+          </button>
+          @if (validacion.puedeContinuar) {
+            <button type="button" class="btn-peligro" [disabled]="cargando" (click)="activar()">
+              @if (cargando) { <i class="fas fa-spinner fa-spin"></i> Activando... }
+              @else { <i class="fas fa-triangle-exclamation"></i> Continuar de todos modos }
+            </button>
+          }
+        </div>
+      </div>
+    }
+
     @if (resumen) {
       <div class="panel">
-        <h2>Resumen de la importacion</h2>
+        <h2>Resumen de la activacion</h2>
         <div class="resumen">
           <div class="resumen-card"><span class="valor">{{ resumen.creados }}</span><span class="etiqueta">Creados</span></div>
           <div class="resumen-card"><span class="valor">{{ resumen.actualizados }}</span><span class="etiqueta">Actualizados</span></div>
@@ -46,7 +174,7 @@
             </table>
           </div>
         } @else {
-          <div class="alerta ok"><i class="fas fa-circle-check"></i> Importacion completada sin errores.</div>
+          <div class="alerta ok"><i class="fas fa-circle-check"></i> Activacion completada sin errores.</div>
         }
       </div>
     }

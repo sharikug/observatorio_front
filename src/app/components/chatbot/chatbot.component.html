@@ -9,10 +9,27 @@
       <button class="close-btn" (click)="toggleChat()"><i class="fas fa-times"></i></button>
     </div>
     <div class="chat-messages">
-      <div class="message" *ngFor="let msg of messages" [class.user]="msg.isUser" [class.bot]="!msg.isUser">
+      <div class="message" *ngFor="let msg of messages" [class.user]="msg.isUser" [class.bot]="!msg.isUser" [class.out-scope]="msg.enAlcance === false">
         <i *ngIf="!msg.isUser" class="fas fa-robot"></i>
         <i *ngIf="msg.isUser" class="fas fa-user"></i>
-        <span>{{ msg.text }}</span>
+        <div class="message-body">
+          <span class="message-text">{{ msg.text }}</span>
+          @if (msg.fuenteDatos) {
+            <div class="fuente-datos"><i class="fas fa-file-excel"></i> Fuente: {{ msg.fuenteDatos }}</div>
+          }
+          @if (msg.fuentes && msg.fuentes.length) {
+            <div class="fuentes">
+              <span class="fuentes-title"><i class="fas fa-book"></i> Fuentes</span>
+              <ul>
+                <li *ngFor="let f of msg.fuentes">{{ f }}</li>
+              </ul>
+            </div>
+          }
+        </div>
+      </div>
+      <div class="message bot" *ngIf="cargando">
+        <i class="fas fa-robot"></i>
+        <div class="message-body"><span class="message-text typing">Consultando fuentes autorizadas...</span></div>
       </div>
     </div>
     <div class="sample-questions" *ngIf="messages.length <= 1">
@@ -21,7 +38,7 @@
     </div>
     <div class="chat-input">
       <input type="text" [(ngModel)]="message" placeholder="Escribe tu pregunta..." (keyup.enter)="sendMessage()">
-      <button class="send-btn" (click)="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+      <button class="send-btn" (click)="sendMessage()" [disabled]="cargando"><i class="fas fa-paper-plane"></i></button>
     </div>
   </div>
 </div>

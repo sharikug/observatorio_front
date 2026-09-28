@@ -73,6 +73,78 @@ export interface ImportarResumen {
   errores: ImportarError[];
 }
 
+export type TipoInconsistencia =
+  | 'ARCHIVO_NO_EXCEL' | 'ARCHIVO_CORRUPTO' | 'SIN_HOJAS' | 'SIN_ENCABEZADOS'
+  | 'ENCABEZADO_FALTANTE' | 'ENCABEZADO_DESCONOCIDO' | 'HOJA_FALTANTE'
+  | 'HOJA_NO_RECONOCIDA' | 'HOJA_VACIA' | 'ENCABEZADO_VACIO' | 'ENCABEZADO_DUPLICADO'
+  | 'FILA_VACIA' | 'COLUMNA_VACIA' | 'CELDA_VACIA' | 'TIPO_INVALIDO'
+  | 'CANTIDAD_COLUMNAS' | 'DUPLICADO' | 'TRUNCADO';
+
+export const TIPOS_CRITICOS: TipoInconsistencia[] = [
+  'ARCHIVO_NO_EXCEL', 'ARCHIVO_CORRUPTO', 'SIN_HOJAS', 'SIN_ENCABEZADOS',
+  'ENCABEZADO_FALTANTE', 'ENCABEZADO_DESCONOCIDO'
+];
+
+export function esCritico(tipo: TipoInconsistencia): boolean {
+  return TIPOS_CRITICOS.includes(tipo);
+}
+
+export interface ValidacionInconsistencia {
+  hoja: string;
+  fila: number;
+  columna: string;
+  nombreColumna: string;
+  celda: string;
+  tipo: TipoInconsistencia;
+  mensaje: string;
+  sugerencia: string;
+}
+
+export interface ValidacionHoja {
+  nombre: string;
+  filas: number;
+  inconsistencias: number;
+  criticas: number;
+}
+
+export interface ValidacionResultado {
+  archivo: string;
+  valido: boolean;
+  puedeContinuar: boolean;
+  totalInconsistencias: number;
+  criticas: number;
+  advertencias: number;
+  hojas: ValidacionHoja[];
+  inconsistencias: ValidacionInconsistencia[];
+}
+
+export type ExcelEstado = 'ACTIVO' | 'HISTORICO' | 'RECHAZADO';
+
+export interface ExcelCargadoItem {
+  id: string;
+  nombre: string;
+  tamano: number;
+  estado: ExcelEstado;
+  fechaCarga: string;
+  fechaHistorico: string;
+  usuario: string;
+  valido: boolean;
+  criticas: number;
+  advertencias: number;
+  totalInconsistencias: number;
+  activo: boolean;
+}
+
+export interface ExcelHistorial {
+  activo: ExcelCargadoItem | null;
+  historial: ExcelCargadoItem[];
+}
+
+export interface ExcelActivado {
+  excel: ExcelCargadoItem;
+  importacion: ImportarResumen;
+}
+
 export interface ReporteIndicador {
   etiqueta: string;
   valor: string;

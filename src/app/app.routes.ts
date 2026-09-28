@@ -8,6 +8,7 @@ export const routes: Routes = [
   { path: 'investigacion/proyectos', loadComponent: () => import('./pages/dashboard-proyectos/dashboard-proyectos.component').then(m => m.DashboardProyectosComponent) },
   { path: 'investigacion/grupos', loadComponent: () => import('./pages/dashboard-grupos/dashboard-grupos.component').then(m => m.DashboardGruposComponent) },
   { path: 'admin/importar', canActivate: [adminGuard], loadComponent: () => import('./pages/admin-importar/admin-importar.component').then(m => m.AdminImportarComponent) },
+  { path: 'admin/ia', canActivate: [adminGuard], loadComponent: () => import('./pages/admin-ia/admin-ia.component').then(m => m.AdminIaComponent) },
   { path: 'impacto', loadComponent: () => import('./pages/impacto/impacto.component').then(m => m.ImpactoComponent) },
   { path: 'impacto/:id', loadComponent: () => import('./pages/detalle-impacto/detalle-impacto.component').then(m => m.DetalleImpactoComponent) },
   { path: 'reportes', loadComponent: () => import('./pages/reportes/reportes.component').then(m => m.ReportesComponent) },

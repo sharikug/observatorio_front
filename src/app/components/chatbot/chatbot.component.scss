@@ -17,3 +17,18 @@
 .chat-input input:focus { outline: none; border-color: var(--green-medium); }
 .send-btn { padding: 0.5rem 1rem; background: var(--green-medium); color: white; border: none; border-radius: 25px; cursor: pointer; font-size: 14px; }
 .send-btn:hover { background: var(--green-dark); }
+.send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.chat-header { display: flex; align-items: center; justify-content: space-between; }
+.header-info { display: flex; align-items: center; gap: 0.5rem; color: white; }
+.close-btn { background: transparent; border: none; color: white; cursor: pointer; font-size: 14px; }
+.message { display: flex; gap: 0.5rem; align-items: flex-start; }
+.message-body { display: flex; flex-direction: column; gap: 0.4rem; }
+.message-text { white-space: pre-wrap; }
+.message.out-scope { background: #fff4e5; border: 1px solid #ffd8a8; }
+.fuentes { border-top: 1px dashed var(--border); padding-top: 0.35rem; }
+.fuentes-title { font-size: 11px; font-weight: 600; color: var(--text-light); display: block; margin-bottom: 0.2rem; }
+.fuentes ul { margin: 0; padding-left: 1rem; }
+.fuentes li { font-size: 12px; color: var(--text-light); }
+.fuente-datos { font-size: 11px; color: var(--text-light); margin-top: 0.4rem; padding: 0.3rem 0.5rem; background: rgba(0, 123, 62, 0.07); border-left: 3px solid var(--green-medium); border-radius: 3px; }
+.fuente-datos i { margin-right: 0.3rem; color: var(--green-medium); }
+.typing { color: var(--text-light); font-style: italic; }

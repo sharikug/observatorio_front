@@ -1,0 +1,106 @@
+<section class="hero-banner">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1><i class="fas fa-robot"></i> Módulo de IA</h1>
+    <p>Documentos autorizados, contenido institucional y trazabilidad del asistente</p>
+  </div>
+</section>
+
+<section class="importar">
+  <div class="importar-container">
+    @if (error) { <div class="alerta error"><i class="fas fa-exclamation-triangle"></i> {{ error }}</div> }
+    @if (mensaje) { <div class="alerta ok"><i class="fas fa-circle-check"></i> {{ mensaje }}</div> }
+
+    <div class="panel">
+      <h2>Cargar documento (PDF, Word, Excel)</h2>
+      <p class="ayuda">Solo se indexan documentos autorizados. Los roles permitidos controlan quién puede recuperarlos (PUBLICO, ANALISTA, ADMINISTRADOR).</p>
+      <label class="file-input">
+        <input type="file" accept=".pdf,.docx,.xlsx,.xls,.txt,.md,.csv" (change)="seleccionar($event)">
+        <span class="file-btn"><i class="fas fa-folder-open"></i> Seleccionar archivo</span>
+        <span class="file-name">{{ archivo ? archivo.name : 'Ningún archivo seleccionado' }}</span>
+      </label>
+      <label class="campo">
+        <span>Roles permitidos</span>
+        <input type="text" [(ngModel)]="roles" placeholder="PUBLICO, ANALISTA">
+      </label>
+      <button type="button" class="btn-importar" [disabled]="!archivo || cargando" (click)="subirDocumento()">
+        @if (cargando) { <i class="fas fa-spinner fa-spin"></i> Indexando... } @else { <i class="fas fa-upload"></i> Indexar documento }
+      </button>
+    </div>
+
+    <div class="panel">
+      <h2>Indexar contenido institucional</h2>
+      <p class="ayuda">Registra secciones publicadas del sitio para que el asistente las cite con su enlace.</p>
+      <div class="grid-2">
+        <label class="campo"><span>Título</span><input type="text" [(ngModel)]="contenido.titulo"></label>
+        <label class="campo"><span>URL</span><input type="text" [(ngModel)]="contenido.url" placeholder="/convocatorias"></label>
+      </div>
+      <label class="campo"><span>Roles permitidos</span><input type="text" [(ngModel)]="contenido.roles"></label>
+      <label class="campo"><span>Texto publicado</span><textarea rows="5" [(ngModel)]="contenido.texto"></textarea></label>
+      <button type="button" class="btn-importar" [disabled]="cargando" (click)="indexarContenido()">
+        <i class="fas fa-plus"></i> Indexar contenido
+      </button>
+    </div>
+
+    <div class="panel">
+      <h2>Documentos y fuentes indexadas</h2>
+      <div class="tabla-scroll">
+        <table>
+          <thead><tr><th>Nombre</th><th>Tipo</th><th>Fuente</th><th>Roles</th><th>Estado</th></tr></thead>
+          <tbody>
+            @for (d of documentos; track d.id_documento) {
+              <tr><td>{{ d.nombre }}</td><td>{{ d.tipo }}</td><td>{{ d.fuente }}</td><td>{{ d.roles_permitidos }}</td><td>{{ d.estado }}</td></tr>
+            } @empty {
+              <tr><td colspan="5">Sin fuentes indexadas.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Diccionario de indicadores</h2>
+      <div class="tabla-scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Indicador</th><th>Fórmula</th><th>Unidad</th><th>Enlace</th></tr></thead>
+          <tbody>
+            @for (i of indicadores; track i.id_indicador) {
+              <tr><td>{{ i.id_indicador }}</td><td>{{ i.nombre }}</td><td>{{ i.formula }}</td><td>{{ i.unidad }}</td><td>{{ i.enlace }}</td></tr>
+            } @empty {
+              <tr><td colspan="5">Sin indicadores cargados.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Trazabilidad de interacciones</h2>
+      <div class="filtros">
+        <label class="campo"><span>Desde</span><input type="datetime-local" [(ngModel)]="desde"></label>
+        <label class="campo"><span>Hasta</span><input type="datetime-local" [(ngModel)]="hasta"></label>
+        <button type="button" class="btn-importar" (click)="buscarAuditoria()"><i class="fas fa-search"></i> Consultar</button>
+        <button type="button" class="btn-importar secundario" (click)="exportarAuditoria()"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+      </div>
+      <div class="tabla-scroll">
+        <table>
+          <thead><tr><th>Fecha</th><th>Usuario</th><th>Pregunta</th><th>Fuentes</th><th>Alcance</th><th>ms</th></tr></thead>
+          <tbody>
+            @for (a of auditoria; track a.id_auditoria) {
+              <tr>
+                <td>{{ a.fecha }}</td>
+                <td>{{ a.email }}</td>
+                <td>{{ a.pregunta }}</td>
+                <td>{{ a.fragmentos || '—' }}</td>
+                <td>{{ a.en_alcance ? 'Dentro' : 'Fuera' }}</td>
+                <td>{{ a.latencia_ms }}</td>
+              </tr>
+            } @empty {
+              <tr><td colspan="6">Sin interacciones registradas en el período.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
