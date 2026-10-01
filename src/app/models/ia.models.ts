@@ -6,6 +6,8 @@ export interface ChatResponse {
   latenciaMs: number;
   /** Excel ACTIVO del que proviene la respuesta. */
   fuenteDatos: string;
+  /** Conversacion donde quedo guardada la respuesta; se envia en el siguiente turno. */
+  conversacionId: string;
 }
 
 export interface BorradorRequest {
@@ -25,7 +27,11 @@ export interface IaDocumento {
   tipo: string;
   fuente: string;
   roles_permitidos: string;
+  /** PENDIENTE | DISPONIBLE | ERROR (HU-06). */
   estado: string;
+  /** Quien lo subio; se registra en la ingesta para poder auditarla. */
+  usuario: string | null;
+  detalle_error: string | null;
   fecha_carga: string;
 }
 
@@ -56,4 +62,22 @@ export interface IaAuditoriaItem {
 export interface IaConector {
   id: string;
   descripcion: string;
+}
+
+/** HU-30: memoria conversacional del asistente. */
+export interface IaConversacion {
+  id_conversacion: string;
+  titulo: string;
+  creado: string;
+  actualizado: string;
+  mensajes: number;
+}
+
+export interface IaMensaje {
+  id_mensaje: number;
+  rol: 'user' | 'assistant';
+  contenido: string;
+  fuentes: string;
+  en_alcance: boolean;
+  creado: string;
 }

@@ -45,7 +45,7 @@ export class RegistroComponent {
     }).subscribe({
       next: (response) => {
         this.authService.setSession(response);
-        this.router.navigate(['/home']);
+        this.router.navigate(['/ia']);
       },
       error: (err) => {
         this.loading = false;

@@ -1,44 +1,80 @@
-<div class="chatbot-container" [class.open]="isOpen">
-  <button class="chat-toggle" (click)="toggleChat()"><i class="fas fa-comments"></i></button>
-  <div class="chat-window" *ngIf="isOpen">
-    <div class="chat-header">
-      <div class="header-info">
-        <i class="fas fa-robot"></i>
-        <span class="bot-name">Asistente IA</span>
+<div class="chatbot-container" [class.open]="isOpen" [class.modulo]="modulo">
+  <button *ngIf="!modulo" class="chat-toggle" (click)="toggleChat()"><i class="fas fa-comments"></i></button>
+
+  <div class="chat-window" [class.visible]="modulo || isOpen">
+    <aside class="chat-lateral" *ngIf="modulo">
+      <button class="nuevo-chat" (click)="nuevaConversacion()">
+        <i class="fas fa-plus"></i> Nuevo chat
+      </button>
+      <nav class="lateral-menu">
+        <a routerLink="/ia" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><i class="fas fa-robot"></i> Observatorio IA</a>
+        <a routerLink="/reportes" routerLinkActive="active"><i class="fas fa-chart-column"></i> Reportes</a>
+        <a routerLink="/admin/ia" routerLinkActive="active" *ngIf="esAdmin"><i class="fas fa-file-lines"></i> Documentos y auditoria</a>
+      </nav>
+      <div class="historial">
+        <p class="historial-titulo">Conversaciones</p>
+        <div class="historial-item" *ngFor="let c of conversaciones; trackBy: trackConversacion"
+             [class.activa]="c.id_conversacion === conversacionId" (click)="abrirConversacion(c.id_conversacion)">
+          <span class="historial-texto">{{ c.titulo }}</span>
+          <button class="historial-borrar" title="Eliminar conversacion" (click)="borrarConversacion(c.id_conversacion, $event)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+        <p class="historial-vacio" *ngIf="!conversaciones.length">Aun no hay conversaciones.</p>
       </div>
-      <button class="close-btn" (click)="toggleChat()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="chat-messages">
-      <div class="message" *ngFor="let msg of messages" [class.user]="msg.isUser" [class.bot]="!msg.isUser" [class.out-scope]="msg.enAlcance === false">
-        <i *ngIf="!msg.isUser" class="fas fa-robot"></i>
-        <i *ngIf="msg.isUser" class="fas fa-user"></i>
-        <div class="message-body">
-          <span class="message-text">{{ msg.text }}</span>
-          @if (msg.fuenteDatos) {
-            <div class="fuente-datos"><i class="fas fa-file-excel"></i> Fuente: {{ msg.fuenteDatos }}</div>
-          }
-          @if (msg.fuentes && msg.fuentes.length) {
-            <div class="fuentes">
-              <span class="fuentes-title"><i class="fas fa-book"></i> Fuentes</span>
+    </aside>
+
+    <section class="chat-main">
+      <div class="chat-header">
+        <div class="header-info">
+          <i class="fas fa-robot"></i>
+          <div class="header-text">
+            <span class="bot-name">Observatorio IA</span>
+            <span class="bot-subtitle" *ngIf="modulo">Consulta los datos y documentos autorizados del Observatorio.</span>
+          </div>
+        </div>
+        <button class="close-btn" *ngIf="!modulo" (click)="toggleChat()"><i class="fas fa-times"></i></button>
+        <button class="close-btn" *ngIf="modulo" (click)="nuevaConversacion()" title="Limpiar conversacion">
+          <i class="fas fa-broom"></i>
+        </button>
+      </div>
+
+      <div class="chat-messages">
+        <div class="message" *ngFor="let msg of messages" [class.user]="msg.isUser" [class.bot]="!msg.isUser" [class.out-scope]="msg.enAlcance === false">
+          <i *ngIf="!msg.isUser" class="fas fa-robot"></i>
+          <i *ngIf="msg.isUser" class="fas fa-user"></i>
+          <div class="message-body">
+            <div class="message-text" [innerHTML]="msg.text | markdown"></div>
+            <button class="copiar" *ngIf="!msg.isUser" (click)="copiar(msg.text)" title="Copiar respuesta">
+              <i class="fas fa-copy"></i>
+            </button>
+            <div class="fuente-datos" *ngIf="msg.fuenteDatos">
+              <i class="fas fa-file-excel"></i> Fuente: {{ msg.fuenteDatos }}
+            </div>
+            <details class="fuentes" *ngIf="msg.fuentes && msg.fuentes.length">
+              <summary class="fuentes-title"><i class="fas fa-book"></i> Fuentes utilizadas ({{ msg.fuentes.length }})</summary>
               <ul>
                 <li *ngFor="let f of msg.fuentes">{{ f }}</li>
               </ul>
-            </div>
-          }
+            </details>
+          </div>
+        </div>
+        <div class="message bot" *ngIf="cargando">
+          <i class="fas fa-robot"></i>
+          <div class="message-body"><span class="message-text typing">Pensando... consultando fuentes autorizadas.</span></div>
         </div>
       </div>
-      <div class="message bot" *ngIf="cargando">
-        <i class="fas fa-robot"></i>
-        <div class="message-body"><span class="message-text typing">Consultando fuentes autorizadas...</span></div>
+
+      <div class="sample-questions" *ngIf="messages.length <= 1">
+        <p><i class="fas fa-question-circle"></i> Preguntas frecuentes:</p>
+        <button *ngFor="let q of sampleQuestions" class="sample-btn" (click)="askQuestion(q)">{{ q }}</button>
       </div>
-    </div>
-    <div class="sample-questions" *ngIf="messages.length <= 1">
-      <p><i class="fas fa-question-circle"></i> Preguntas frecuentes:</p>
-      <button *ngFor="let q of sampleQuestions" class="sample-btn" (click)="askQuestion(q)">{{ q }}</button>
-    </div>
-    <div class="chat-input">
-      <input type="text" [(ngModel)]="message" placeholder="Escribe tu pregunta..." (keyup.enter)="sendMessage()">
-      <button class="send-btn" (click)="sendMessage()" [disabled]="cargando"><i class="fas fa-paper-plane"></i></button>
-    </div>
+
+      <div class="chat-input">
+        <input type="text" [(ngModel)]="message" placeholder="Escribe tu pregunta..."
+               (keyup.enter)="sendMessage()" [disabled]="cargando">
+        <button class="send-btn" (click)="sendMessage()" [disabled]="cargando"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </section>
   </div>
 </div>

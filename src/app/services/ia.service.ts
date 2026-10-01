@@ -7,8 +7,10 @@ import {
   ChatResponse,
   IaAuditoriaItem,
   IaConector,
+  IaConversacion,
   IaDocumento,
-  IaIndicador
+  IaIndicador,
+  IaMensaje
 } from '../models/ia.models';
 
 @Injectable({ providedIn: 'root' })
@@ -17,12 +19,35 @@ export class IaService {
 
   constructor(private http: HttpClient) {}
 
-  chat(pregunta: string): Observable<ChatResponse> {
-    return this.http.post<ChatResponse>(`${this.apiUrl}/chat`, { pregunta });
+  chat(pregunta: string, conversacionId?: string): Observable<ChatResponse> {
+    return this.http.post<ChatResponse>(`${this.apiUrl}/chat`, { pregunta, conversacionId });
+  }
+
+  nuevaConversacion(): Observable<{ id: string }> {
+    return this.http.post<{ id: string }>(`${this.apiUrl}/conversaciones`, {});
+  }
+
+  getConversaciones(): Observable<IaConversacion[]> {
+    return this.http.get<IaConversacion[]>(`${this.apiUrl}/conversaciones`);
+  }
+
+  getConversacion(id: string): Observable<IaMensaje[]> {
+    return this.http.get<IaMensaje[]>(`${this.apiUrl}/conversaciones/${id}`);
+  }
+
+  borrarConversacion(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/conversaciones/${id}`);
   }
 
   generarBorrador(request: BorradorRequest): Observable<BorradorResponse> {
     return this.http.post<BorradorResponse>(`${this.apiUrl}/reportes`, request);
+  }
+
+  /** HU-07: descarga el borrador ya redactado como PDF o Word, sin volver a llamar al modelo. */
+  exportarBorrador(formato: 'pdf' | 'docx', tema: string, borrador: string,
+                   fuentes: string[], leyenda: string): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/reportes/exportar`, { tema, borrador, fuentes, leyenda },
+      { responseType: 'blob', params: { formato } });
   }
 
   getIndicadores(): Observable<IaIndicador[]> {
@@ -37,11 +62,11 @@ export class IaService {
     return this.http.get<IaDocumento[]>(`${this.apiUrl}/documentos`);
   }
 
-  cargarDocumento(archivo: File, roles: string[]): Observable<{ id: string; nombre: string; estado: string; fragmentos: number }> {
+  cargarDocumento(archivo: File, roles: string[]): Observable<{ id: string; nombre: string; estado: string; fragmentos: number; mensaje: string }> {
     const datos = new FormData();
     datos.append('archivo', archivo);
     roles.forEach((r) => datos.append('roles', r));
-    return this.http.post<{ id: string; nombre: string; estado: string; fragmentos: number }>(
+    return this.http.post<{ id: string; nombre: string; estado: string; fragmentos: number; mensaje: string }>(
       `${this.apiUrl}/documentos`, datos);
   }
 

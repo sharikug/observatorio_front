@@ -1,8 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { DashboardReportable, ReporteHistorialItem } from '../../models/observatorio.models';
 import { AuthService } from '../../services/auth.service';
+import { IaService } from '../../services/ia.service';
 import { ObservatorioService } from '../../services/observatorio.service';
+import { MarkdownPipe } from '../../components/chatbot/markdown.pipe';
 import { DashboardProyectosComponent } from '../dashboard-proyectos/dashboard-proyectos.component';
 import { DashboardGruposComponent } from '../dashboard-grupos/dashboard-grupos.component';
 
@@ -11,13 +14,14 @@ type Tablero = 'proyectos' | 'grupos';
 @Component({
   selector: 'app-reportes',
   standalone: true,
-  imports: [RouterLink, DashboardProyectosComponent, DashboardGruposComponent],
+  imports: [RouterLink, FormsModule, MarkdownPipe, DashboardProyectosComponent, DashboardGruposComponent],
   templateUrl: './reportes.component.html',
   styleUrl: './reportes.component.scss'
 })
 export class ReportesComponent implements OnInit {
   private observatorio = inject(ObservatorioService);
   private auth = inject(AuthService);
+  private ia = inject(IaService);
   private cdr = inject(ChangeDetectorRef);
 
   @ViewChild('tablero') tableroRef?: DashboardReportable;
@@ -27,6 +31,13 @@ export class ReportesComponent implements OnInit {
   avisoLogin = false;
   error = '';
   historial: ReporteHistorialItem[] = [];
+
+  temaIa = '';
+  readonly temaSugerido = 'Ej.: informe ejecutivo de produccion cientifica';
+  generandoIa = false;
+  borrador = '';
+  borradorFuentes: string[] = [];
+  leyenda = '';
 
   ngOnInit(): void {
     if (this.isLoggedIn()) {
@@ -84,6 +95,51 @@ export class ReportesComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  /** HU-07: borrador narrativo redactado por el asistente sobre las fuentes autorizadas. */
+  generarBorrador(): void {
+    this.error = '';
+    if (!this.isLoggedIn()) {
+      this.avisoLogin = true;
+      return;
+    }
+    this.generandoIa = true;
+    this.ia.generarBorrador({ tema: this.temaIa.trim(), filtros: [] }).subscribe({
+      next: (r) => {
+        this.borrador = r.borrador;
+        this.borradorFuentes = r.fuentes;
+        this.leyenda = r.leyenda;
+        this.generandoIa = false;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.generandoIa = false;
+        this.error = 'No se pudo redactar el borrador. Intenta nuevamente.';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  /** HU-07: el backend arma el PDF/Word real a partir del borrador que el usuario ya leyo. */
+  descargarBorrador(formato: 'pdf' | 'docx'): void {
+    if (!this.borrador) return;
+    this.generandoIa = true;
+    this.error = '';
+    this.ia.exportarBorrador(formato, this.temaIa.trim(), this.borrador, this.borradorFuentes, this.leyenda)
+      .subscribe({
+        next: (archivo) => {
+          this.descargarBlob(archivo,
+            `informe-ia-${new Date().toISOString().slice(0, 10)}.${formato}`);
+          this.generandoIa = false;
+          this.cdr.detectChanges();
+        },
+        error: () => {
+          this.generandoIa = false;
+          this.error = `No se pudo generar el archivo ${formato.toUpperCase()}.`;
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   private cargarHistorial(): void {

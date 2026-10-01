@@ -10,7 +10,11 @@
         <li><a routerLink="/admin/importar" routerLinkActive="active"><i class="fas fa-file-import"></i> Importar datos</a></li>
         <li><a routerLink="/admin/ia" routerLinkActive="active"><i class="fas fa-robot"></i> Módulo IA</a></li>
       }
-      <li><a routerLink="/login" routerLinkActive="active"><i class="fas fa-robot"></i> Asistente IA</a></li>
+      <li><a routerLink="/ia" routerLinkActive="active"><i class="fas fa-robot"></i> Asistente IA</a></li>
+      @if (!estaLogueado) {
+        <li><a routerLink="/login" routerLinkActive="active"><i class="fas fa-right-to-bracket"></i> Iniciar Sesion</a></li>
+        <li><a routerLink="/registro" routerLinkActive="active"><i class="fas fa-user-plus"></i> Registrarse</a></li>
+      }
     </ul>
   </div>
 </nav>

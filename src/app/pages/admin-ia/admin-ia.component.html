@@ -46,12 +46,16 @@
       <h2>Documentos y fuentes indexadas</h2>
       <div class="tabla-scroll">
         <table>
-          <thead><tr><th>Nombre</th><th>Tipo</th><th>Fuente</th><th>Roles</th><th>Estado</th></tr></thead>
+          <thead><tr><th>Nombre</th><th>Tipo</th><th>Fuente</th><th>Roles</th><th>Subido por</th><th>Estado</th></tr></thead>
           <tbody>
             @for (d of documentos; track d.id_documento) {
-              <tr><td>{{ d.nombre }}</td><td>{{ d.tipo }}</td><td>{{ d.fuente }}</td><td>{{ d.roles_permitidos }}</td><td>{{ d.estado }}</td></tr>
+              <tr>
+                <td>{{ d.nombre }}@if (d.detalle_error) {<br /><small>{{ d.detalle_error }}</small>}</td>
+                <td>{{ d.tipo }}</td><td>{{ d.fuente }}</td><td>{{ d.roles_permitidos }}</td>
+                <td>{{ d.usuario || '-' }}</td><td>{{ d.estado }}</td>
+              </tr>
             } @empty {
-              <tr><td colspan="5">Sin fuentes indexadas.</td></tr>
+              <tr><td colspan="6">Sin fuentes indexadas.</td></tr>
             }
           </tbody>
         </table>

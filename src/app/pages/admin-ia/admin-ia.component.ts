@@ -51,7 +51,7 @@ export class AdminIaComponent implements OnInit {
     this.error = '';
     this.ia.cargarDocumento(this.archivo, this.listaRoles(this.roles)).subscribe({
       next: (r) => {
-        this.mensaje = `Documento "${r.nombre}" indexado (${r.fragmentos} fragmentos).`;
+        this.mensaje = r.mensaje ?? `Documento "${r.nombre}" disponible (${r.fragmentos} fragmentos).`;
         this.archivo = null;
         this.cargando = false;
         this.cargar();

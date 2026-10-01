@@ -63,9 +63,34 @@
       </button>
     </div>
 
+    <div class="report-ia">
+      <h4><i class="fas fa-robot"></i> Informe redactado por el asistente (IA)</h4>
+      <p class="report-ia-hint">
+        Redacta un borrador narrativo a partir de las fuentes autorizadas del Observatorio.
+        Requiere tu revision antes de usarlo como documento institucional.
+      </p>
+      <div class="report-ia-input">
+        <input type="text" [(ngModel)]="temaIa" [placeholder]="temaSugerido"
+               (keyup.enter)="generarBorrador()" [disabled]="generandoIa">
+        <button type="button" class="btn-generate" [disabled]="generandoIa || !temaIa.trim()" (click)="generarBorrador()">
+          <i class="fas fa-pen-to-square"></i>
+          {{ generandoIa ? 'Redactando...' : 'Generar borrador' }}
+        </button>
+      </div>
+      @if (borrador) {
+        <p class="report-leyenda"><i class="fas fa-triangle-exclamation"></i> {{ leyenda }}</p>
+        <div class="report-borrador" [innerHTML]="borrador | markdown"></div>
+        <button type="button" class="btn-download" [disabled]="generandoIa" (click)="descargarBorrador('pdf')">
+          <i class="fas fa-file-pdf"></i> Descargar PDF
+        </button>
+        <button type="button" class="btn-download" [disabled]="generandoIa" (click)="descargarBorrador('docx')">
+          <i class="fas fa-file-word"></i> Descargar Word
+        </button>
+      }
+    </div>
+
     <div class="report-history">
-      <h4>Historico de archivos generados</h4>
-      @if (!isLoggedIn()) {
+      <h4>Historico de archivos generados</h4>      @if (!isLoggedIn()) {
         <p class="historial-vacio">Inicia sesion para consultar y volver a descargar tus reportes.</p>
       } @else if (historial.length) {
         <ul class="historial-lista">

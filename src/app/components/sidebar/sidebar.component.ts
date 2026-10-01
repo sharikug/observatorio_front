@@ -16,4 +16,9 @@ export class SidebarComponent {
   get isAdmin(): boolean {
     return (this.auth.getRol() ?? '').toUpperCase().includes('ADMIN');
   }
+
+  /** El menu ofrece Iniciar Sesion solo si no hay sesion: si ya la hay, ofrece salir. */
+  get estaLogueado(): boolean {
+    return this.auth.isLoggedIn();
+  }
 }

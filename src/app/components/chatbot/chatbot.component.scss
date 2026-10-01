@@ -1,7 +1,10 @@
 .chatbot-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; }
 .chat-toggle { width: 60px; height: 60px; border-radius: 50%; background: var(--green-medium); color: white; border: none; cursor: pointer; font-size: 14px; font-family: var(--font-body); box-shadow: 0 5px 20px rgba(0,72,43,0.3); transition: all 0.3s; }
 .chat-toggle:hover { background: var(--green-dark); }
-.chat-window { position: absolute; bottom: 70px; right: 0; width: 380px; height: 500px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; }
+/* Oculto por defecto: el componente alterna la clase "visible" desde TypeScript.
+   Sin esta regla el panel queda siempre abierto y el boton de cerrar no hace nada. */
+.chat-window { position: absolute; bottom: 70px; right: 0; width: 380px; height: 500px; background: white; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); display: none; flex-direction: column; overflow: hidden; }
+.chat-window.visible { display: flex; }
 .chat-header { background: var(--green-dark); padding: 1rem 1.25rem; }
 .bot-name { font-family: var(--font-body); font-weight: 600; color: white; }
 .chat-messages { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -32,3 +35,43 @@
 .fuente-datos { font-size: 11px; color: var(--text-light); margin-top: 0.4rem; padding: 0.3rem 0.5rem; background: rgba(0, 123, 62, 0.07); border-left: 3px solid var(--green-medium); border-radius: 3px; }
 .fuente-datos i { margin-right: 0.3rem; color: var(--green-medium); }
 .typing { color: var(--text-light); font-style: italic; }
+
+/* Modulo de pagina completa ("Observatorio IA") -------------------------------- */
+.chatbot-container.modulo { position: static; height: calc(100vh - 150px); min-height: 520px; }
+.modulo .chat-window { position: static; width: 100%; height: 100%; display: flex; flex-direction: row; border-radius: 12px; }
+.chat-lateral { width: 260px; flex-shrink: 0; border-right: 1px solid var(--border); padding: 1rem; display: flex; flex-direction: column; gap: 1rem; background: #fbfdf7; overflow-y: auto; }
+.nuevo-chat { width: 100%; padding: 0.7rem; background: var(--green-medium); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: var(--font-body); }
+.nuevo-chat:hover { background: var(--green-dark); }
+.lateral-menu { display: flex; flex-direction: column; gap: 0.25rem; }
+.lateral-menu a { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.6rem; border-radius: 6px; font-size: 13px; color: var(--text-dark); text-decoration: none; }
+.lateral-menu a:hover, .lateral-menu a.active { background: rgba(0,123,62,0.08); color: var(--green-dark); }
+.historial { display: flex; flex-direction: column; gap: 0.25rem; }
+.historial-titulo { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-light); margin: 0; }
+.historial-vacio { font-size: 12px; color: var(--text-light); font-style: italic; }
+.historial-item { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.6rem; border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--text-dark); }
+.historial-item:hover { background: rgba(0,123,62,0.06); }
+.historial-item.activa { background: rgba(0,123,62,0.12); font-weight: 600; }
+.historial-texto { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.historial-borrar { background: transparent; border: none; color: var(--text-light); cursor: pointer; font-size: 12px; opacity: 0; }
+.historial-item:hover .historial-borrar { opacity: 1; }
+.historial-borrar:hover { color: #b3261e; }
+.chat-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.header-text { display: flex; flex-direction: column; }
+.bot-subtitle { font-size: 11px; font-weight: 400; opacity: 0.85; }
+.modulo .message { max-width: 75%; }
+
+/* Markdown de la respuesta: tablas y enfasis sin libreria externa */
+.message-text ::ng-deep table { border-collapse: collapse; margin: 0.5rem 0; font-size: 13px; width: 100%; }
+.message-text ::ng-deep th, .message-text ::ng-deep td { border: 1px solid var(--border); padding: 0.35rem 0.6rem; text-align: left; }
+.message-text ::ng-deep th { background: rgba(0,123,62,0.07); }
+.message-text ::ng-deep h3, .message-text ::ng-deep h4, .message-text ::ng-deep h5, .message-text ::ng-deep h6 { margin: 0.6rem 0 0.3rem; font-size: 14px; }
+.message-text ::ng-deep p { margin: 0.3rem 0; }
+.message-text ::ng-deep ul, .message-text ::ng-deep ol { margin: 0.3rem 0; padding-left: 1.2rem; }
+.message-text ::ng-deep code { background: var(--bg-light); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 12px; }
+.copiar { align-self: flex-start; background: transparent; border: none; color: var(--text-light); cursor: pointer; font-size: 11px; padding: 0; }
+.copiar:hover { color: var(--green-dark); }
+.fuentes summary { cursor: pointer; font-size: 11px; font-weight: 600; color: var(--text-light); }
+
+@media (max-width: 768px) {
+  .chat-lateral { display: none; }
+}

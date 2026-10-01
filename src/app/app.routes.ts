@@ -12,6 +12,7 @@ export const routes: Routes = [
   { path: 'impacto', loadComponent: () => import('./pages/impacto/impacto.component').then(m => m.ImpactoComponent) },
   { path: 'impacto/:id', loadComponent: () => import('./pages/detalle-impacto/detalle-impacto.component').then(m => m.DetalleImpactoComponent) },
   { path: 'reportes', loadComponent: () => import('./pages/reportes/reportes.component').then(m => m.ReportesComponent) },
+  { path: 'ia', loadComponent: () => import('./pages/observatorio-ia/observatorio-ia.component').then(m => m.ObservatorioIaComponent) },
   { path: 'login', loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent) },
   { path: 'registro', loadComponent: () => import('./pages/registro/registro.component').then(m => m.RegistroComponent) },
   { path: 'terminos', loadComponent: () => import('./pages/terminos/terminos.component').then(m => m.TerminosComponent) },
