@@ -16,16 +16,14 @@
         <div class="form-group"><label><i class="fas fa-user"></i> Apellidos</label><input type="text" [(ngModel)]="user.apellidos" name="apellidos"></div>
       </div>
       <div class="form-group"><label><i class="fas fa-envelope"></i> Correo Electronico</label><input type="email" [(ngModel)]="user.email" name="email"></div>
-      <div class="form-row">
-        <div class="form-group"><label><i class="fas fa-phone"></i> Telefono</label><input type="tel" [(ngModel)]="user.telefono" name="telefono"></div>
-        <div class="form-group"><label><i class="fas fa-user-tag"></i> Rol</label>
-          <select [(ngModel)]="user.rol" name="rol" class="rol-select">
-            <option *ngFor="let rol of roles" [value]="rol">{{ rol }}</option>
-          </select>
-        </div>
-      </div>
+      <div class="form-group"><label><i class="fas fa-phone"></i> Telefono</label><input type="tel" [(ngModel)]="user.telefono" name="telefono"></div>
       <div class="form-group"><label><i class="fas fa-lock"></i> Contrasena</label><input type="password" [(ngModel)]="user.password" name="password"></div>
       <div class="form-group"><label><i class="fas fa-lock"></i> Confirmacion de contrasena</label><input type="password" [(ngModel)]="user.confirmPassword" name="confirmPassword"></div>
+      <div class="form-group">
+        <label><i class="fas fa-user-shield"></i> Codigo de administrador <span class="opcional">(opcional)</span></label>
+        <input type="text" [(ngModel)]="user.codigoAdmin" name="codigoAdmin" placeholder="Dejalo vacio si eres estudiante">
+        <small class="field-hint">Este registro es de estudiante. Si la institucion te entrego un codigo de administrador, escribelo aqui y la cuenta queda como administrador.</small>
+      </div>
       <div class="form-checkboxes">
         <label class="checkbox-label"><input type="checkbox" [(ngModel)]="user.acceptData" name="acceptData"><span><i class="fas fa-check-square"></i> Acepto el tratamiento de datos personales</span></label>
         <label class="checkbox-label"><input type="checkbox" [(ngModel)]="user.acceptTerms" name="acceptTerms"><span><i class="fas fa-check-square"></i> Acepto los terminos y condiciones</span></label>

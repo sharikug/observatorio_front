@@ -12,7 +12,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  credentials = { email: '', password: '', rememberMe: false };
+  credentials = { email: '', password: '' };
   errorMessage = '';
   loading = false;
 

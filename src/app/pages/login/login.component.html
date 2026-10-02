@@ -18,13 +18,6 @@
         <label><i class="fas fa-lock"></i> Contrasena</label>
         <input type="password" [(ngModel)]="credentials.password" name="password" placeholder="Tu contrasena">
       </div>
-      <div class="form-options">
-        <label class="checkbox-label">
-          <input type="checkbox" [(ngModel)]="credentials.rememberMe" name="rememberMe">
-          <span><i class="fas fa-check-square"></i> Recordarme</span>
-        </label>
-        <a href="#" class="forgot"><i class="fas fa-key"></i> Restablecer contrasena</a>
-      </div>
       <button type="submit" class="btn-submit" [disabled]="loading"><i class="fas fa-arrow-right"></i> {{ loading ? 'Ingresando...' : 'Ingresar' }}</button>
     </form>
     <p class="register-link">Aun no tienes cuenta? <a routerLink="/registro"><i class="fas fa-user-plus"></i> Registrate aqui</a></p>

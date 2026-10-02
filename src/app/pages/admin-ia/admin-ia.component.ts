@@ -89,6 +89,34 @@ export class AdminIaComponent implements OnInit {
     });
   }
 
+  /**
+   * Borrar una fuente no tiene vuelta atras: en el backend se van el documento y sus
+   * embeddings, y no queda copia del texto. Por eso se pide confirmacion antes de
+   * llamar al servicio, y no despues.
+   */
+  borrarDocumento(doc: IaDocumento): void {
+    const ok = window.confirm(
+      `¿Eliminar "${doc.nombre}"?\n\n`
+      + 'Se borraran tambien sus fragmentos y el indice de busqueda. '
+      + 'El asistente dejara de citar este documento y no se puede deshacer.'
+    );
+    if (!ok) return;
+    this.cargando = true;
+    this.error = '';
+    this.mensaje = '';
+    this.ia.eliminarDocumento(doc.id_documento).subscribe({
+      next: (r) => {
+        this.mensaje = `Documento "${r.nombre ?? doc.nombre}" eliminado.`;
+        this.cargando = false;
+        this.cargar();
+      },
+      error: (e) => {
+        this.cargando = false;
+        this.error = e?.error?.message ?? 'No se pudo eliminar el documento.';
+      }
+    });
+  }
+
   buscarAuditoria(): void {
     this.ia.getAuditoria(this.desde || undefined, this.hasta || undefined).subscribe({
       next: (a) => (this.auditoria = a)

@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { TopbarComponent } from './components/topbar/topbar.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { ChatbotComponent } from './components/chatbot/chatbot.component';
 
+/**
+ * Solo el punto de salida de rutas. El marco (barra superior, menu, pie y asistente)
+ * vive en ShellComponent, para que /login y /registro puedan quedar fuera de el.
+ */
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, TopbarComponent, FooterComponent, ChatbotComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  imports: [RouterOutlet],
+  templateUrl: './app.component.html'
 })
-export class AppComponent {
-  title = 'Observatorio de Investigacion';
-}
+export class AppComponent {}

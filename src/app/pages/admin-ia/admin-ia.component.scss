@@ -29,6 +29,12 @@
 .btn-importar:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-importar.secundario { background: var(--bg-light); color: var(--green-dark); border: 1px solid var(--border); }
 
+/* Rojo a proposito: es la unica accion de la pantalla que no se puede deshacer. */
+.btn-borrar { background: transparent; color: #b00020; border: 1px solid #e6b4b4; border-radius: 8px; padding: 6px 12px; font-family: var(--font-body); font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; white-space: nowrap; }
+.btn-borrar:hover:not(:disabled) { background: #fdecea; }
+.btn-borrar:disabled { opacity: 0.5; cursor: not-allowed; }
+td.acciones { text-align: right; }
+
 .alerta { border-radius: 8px; padding: 0.9rem 1.25rem; font-size: 14px; display: flex; align-items: center; gap: 0.6rem; }
 .alerta.error { background: #fdecea; color: #b00020; }
 .alerta.ok { background: #e8f5e9; color: var(--green-dark); }

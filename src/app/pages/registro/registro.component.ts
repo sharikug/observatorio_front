@@ -4,6 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
+/**
+ * El registro es de una sola clase: estudiante. Quien administra la plataforma levanta
+ * su cuenta de administrador con el codigo que le entrega el backend; el backend es
+ * quien decide si ese codigo vale, asi que este formulario solo lo manda.
+ */
 @Component({
   selector: 'app-registro',
   standalone: true,
@@ -12,8 +17,11 @@ import { AuthService } from '../../services/auth.service';
   styleUrl: './registro.component.scss'
 })
 export class RegistroComponent {
-  roles = ['Estudiante', 'Administrativo', 'Docente'];
-  user = { cedula: '', nombres: '', apellidos: '', email: '', telefono: '', rol: 'Estudiante', password: '', confirmPassword: '', acceptData: false, acceptTerms: false };
+  user = {
+    cedula: '', nombres: '', apellidos: '', email: '', telefono: '',
+    password: '', confirmPassword: '', codigoAdmin: '',
+    acceptData: false, acceptTerms: false
+  };
   errorMessage = '';
   loading = false;
 
@@ -23,6 +31,10 @@ export class RegistroComponent {
     this.errorMessage = '';
     if (!this.user.cedula || !this.user.nombres || !this.user.apellidos || !this.user.email || !this.user.password) {
       this.errorMessage = 'Completa todos los campos obligatorios';
+      return;
+    }
+    if (this.user.password.length < 8) {
+      this.errorMessage = 'La contrasena debe tener al menos 8 caracteres';
       return;
     }
     if (this.user.password !== this.user.confirmPassword) {
@@ -41,7 +53,7 @@ export class RegistroComponent {
       email: this.user.email,
       password: this.user.password,
       phone: this.user.telefono,
-      rol: this.user.rol
+      codigoAdmin: this.user.codigoAdmin
     }).subscribe({
       next: (response) => {
         this.authService.setSession(response);

@@ -74,6 +74,12 @@ export class IaService {
     return this.http.post(`${this.apiUrl}/contenido`, { titulo, url, texto, roles });
   }
 
+  /** Retira una fuente del indice. Definitivo en el backend: no hay copia del texto. */
+  eliminarDocumento(id: string): Observable<{ mensaje: string; nombre: string }> {
+    return this.http.delete<{ mensaje: string; nombre: string }>(
+      `${this.apiUrl}/documentos/${id}`);
+  }
+
   getAuditoria(desde?: string, hasta?: string): Observable<IaAuditoriaItem[]> {
     return this.http.get<IaAuditoriaItem[]>(`${this.apiUrl}/auditoria`, {
       params: { ...(desde ? { desde } : {}), ...(hasta ? { hasta } : {}) }

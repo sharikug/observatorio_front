@@ -26,15 +26,15 @@ export class AuthService {
     this.currentUserSubject.next(response.name);
   }
 
+  /**
+   * El token es sin estado: no hay nada que revocar en el backend, asi que cerrar
+   * sesion es borrar lo guardado en el navegador.
+   */
   logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('name');
     localStorage.removeItem('rol');
     this.currentUserSubject.next(null);
-  }
-
-  get token(): string | null {
-    return localStorage.getItem('token');
   }
 
   isLoggedIn(): boolean {

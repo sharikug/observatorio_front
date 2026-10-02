@@ -69,31 +69,6 @@
   border-color: var(--green-medium);
 }
 
-.form-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 15px;
-  color: var(--green-medium);
-  cursor: pointer;
-}
-
-.checkbox-label input {
-  width: auto;
-}
-
-.forgot {
-  font-size: 15px;
-  color: var(--green-medium);
-}
-
 .btn-submit {
   background: linear-gradient(180deg, var(--green-medium) 0%, var(--green-dark) 100%);
   color: white;

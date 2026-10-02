@@ -8,9 +8,9 @@
 .form-group { margin-bottom: 1.5rem; }
 .form-group label { display: block; font-family: var(--font-body); font-size: 20px; color: var(--green-medium); margin-bottom: 0.5rem; }
 .form-group input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-family: var(--font-body); font-size: 16px; }
-.form-group .rol-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-family: var(--font-body); font-size: 16px; background: var(--bg-white); }
 .form-group input:focus { outline: none; border-color: var(--green-medium); }
-.form-group .rol-select:focus { outline: none; border-color: var(--green-medium); }
+.opcional { font-family: var(--font-body); font-size: 14px; color: var(--text-muted); }
+.field-hint { display: block; margin-top: 0.5rem; font-size: 14px; line-height: 1.5; color: var(--text-muted); }
 .form-checkboxes { margin-bottom: 2rem; }
 .checkbox-label { display: flex; align-items: center; gap: 0.5rem; font-size: 15px; color: var(--green-medium); cursor: pointer; margin-bottom: 0.75rem; }
 .checkbox-label input { width: auto; }
